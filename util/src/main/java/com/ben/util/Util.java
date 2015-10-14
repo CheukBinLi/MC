@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import javassist.CtClass;
 
 public class Util {
-	public final static ExecutorService executorService = Executors.newCachedThreadPool();
 
 	public static final ArrayList<String> getParameterTypes(CtClass... c) {
 		ArrayList<String> a = new ArrayList<String>();
