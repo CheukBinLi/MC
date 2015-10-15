@@ -1,4 +1,4 @@
-package com.ben.Cache;
+package com.ben.cache;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

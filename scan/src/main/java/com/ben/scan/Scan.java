@@ -26,6 +26,7 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ben.util.ExcutorServiceFatory;
 import com.ben.util.Util;
 
 public class Scan {
@@ -73,7 +74,7 @@ public class Scan {
 			else
 				fileClassPaths.add(u);
 		}
-		ExecutorService executorService = Util.executorService;
+		ExecutorService executorService = ExcutorServiceFatory.getSingleExector();
 		//过滤
 		futures.add(executorService.submit(new Scan.FileFilter(jarClassPaths, pathPattern, 0, countDownLatch) {
 			@Override
@@ -92,7 +93,7 @@ public class Scan {
 			}
 		}));
 		countDownLatch.await();
-		executorService.shutdown();
+		//		executorService.shutdown();
 		result.addAll(futures.get(0).get());
 		result.addAll(futures.get(1).get());
 		//		Iterator<String> it = result.iterator();

@@ -16,15 +16,15 @@ public class ExcutorServiceFatory {
 	static int MAX_QUEUE = 15;
 	static int QUEUE = 5;
 	static int mix = 2;
-	public final static ExecutorService executorService = Executors.newCachedThreadPool();
+	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 	static final BlockingQueue<ExecutorService> EXECUTOR_SERVICES = new LinkedBlockingDeque<ExecutorService>();
 	static final BlockingDeque<Integer> SUPPLEMENT = new LinkedBlockingDeque<Integer>();
 	static final BlockingDeque<ExecutorService> RUNING_POOL = new LinkedBlockingDeque<ExecutorService>();
 
 	static {
-		if (EXECUTOR_SERVICES.size() <mix)
+		if (EXECUTOR_SERVICES.size() < mix)
 			SUPPLEMENT.add(QUEUE);
-		Executors.newCachedThreadPool().execute(new Runnable() {
+		SINGLE_EXECUTOR_SERVICE.execute(new Runnable() {
 			public void run() {
 				Integer count = 0;
 				while (!Thread.interrupted()) {
@@ -40,6 +40,10 @@ public class ExcutorServiceFatory {
 				}
 			}
 		});
+	}
+
+	public final static synchronized ExecutorService getSingleExector() {
+		return SINGLE_EXECUTOR_SERVICE;
 	}
 
 	public final static synchronized ExecutorService getExector() {

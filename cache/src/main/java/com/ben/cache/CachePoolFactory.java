@@ -1,4 +1,4 @@
-package com.ben.Cache;
+package com.ben.cache;
 
 public interface CachePoolFactory {
 
