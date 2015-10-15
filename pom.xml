@@ -17,8 +17,7 @@
 	</dependencies>
 	<modules>
 		<module>cache</module>
-		<module>code</module>
-    <module>scan</module>
-    <module>util</module>
-  </modules>
+		<module>scan</module>
+		<module>util</module>
+	</modules>
 </project>
