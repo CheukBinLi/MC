@@ -19,5 +19,6 @@
 		<module>cache</module>
 		<module>scan</module>
 		<module>util</module>
-	</modules>
+    <module>proxy</module>
+  </modules>
 </project>
