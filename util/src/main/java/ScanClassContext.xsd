@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/ScanClassContext" xmlns:tns="http://www.example.org/ScanClassContext" elementFormDefault="qualified">
+
+	<xsd:element name="Context">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PoolFactory" default="com.ben.ScanToPackage.DefaultCacheFactory" type="xsd:string"></xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+
+</xsd:schema>
