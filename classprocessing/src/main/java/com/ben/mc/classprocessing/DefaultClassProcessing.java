@@ -1,28 +1,24 @@
 package com.ben.mc.classprocessing;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ben.mc.cache.DefaultCachePoolFactory;
-import com.ben.mc.cache.DefaultPool;
-import com.ben.mc.util.Util;
-
-import create.n;
-import create.old;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
-import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+
+import com.ben.mc.util.ConstantType;
+import com.ben.mc.util.Util;
+
+import create.old;
 
 public class DefaultClassProcessing extends AbstractClassProcessingFactory {
 
@@ -39,7 +35,7 @@ public class DefaultClassProcessing extends AbstractClassProcessingFactory {
 		classPool.importPackage(clazzName);//继承
 		classPool.importPackage("java.lang.reflect.Method");//添加反射引用
 
-		CtClass newClass = classPool.makeClass(clazzName + "$Impl");//新建代理类
+		CtClass newClass = classPool.makeClass(clazzName + ConstantType.CLASS_IMPL_SUFFIX);//新建代理类
 		newClass.setSuperclass(cz);//继承
 
 		//构造块
@@ -90,15 +86,15 @@ public class DefaultClassProcessing extends AbstractClassProcessingFactory {
 			e.printStackTrace();
 		}
 
-//		Class clazz = newClass.toClass();
-//		System.out.println(clazz.getCanonicalName());
-//		DefaultCachePoolFactory.newInstance().addNFloop4Map(new ClazzInfo(clazz, tempMethod), DefaultPool.NORNAL_BEAN, clazz.getCanonicalName());
-//		return clazz;
+		//		Class clazz = newClass.toClass();
+		//		System.out.println(clazz.getCanonicalName());
+		//		DefaultCachePoolFactory.newInstance().addNFloop4Map(new ClazzInfo(clazz, tempMethod), DefaultPool.NORNAL_BEAN, clazz.getCanonicalName());
+		//		return clazz;
 		return new ClazzInfo(newClass.toClass(), tempMethod);
 	}
 
 	public static void main(String[] args) throws NotFoundException, CannotCompileException, InstantiationException, IllegalAccessException {
-		old o = (old) ((ClazzInfo)new DefaultClassProcessing().classProcessing(old.class)).newInstance();
+		old o = (old) ((ClazzInfo) new DefaultClassProcessing().classProcessing(old.class)).getClazz().newInstance();
 		o.setFX("mba");
 		System.out.println(o.getFX());
 		o.x();

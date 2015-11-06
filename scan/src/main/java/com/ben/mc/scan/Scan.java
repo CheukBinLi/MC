@@ -5,56 +5,54 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.Semaphore;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ben.mc.util.ExcutorServiceFatory;
-import com.ben.mc.util.Util;
 
 public class Scan {
 
-	//	final static CountDownLatch countDownLatch = new CountDownLatch(2);
+	private static final ExecutorService executorService = ExcutorServiceFatory.getExector();
 
-	public static Set<String> doScan(String path) throws IOException, InterruptedException, ExecutionException {
-		Set<URL> scanResult = new LinkedHashSet<URL>();
+	public static final Set<String> doScan(String path) throws IOException, InterruptedException, ExecutionException {
+		Set<String> result = new HashSet<String>();
 		path = path.replace(File.separator, "/");
 		String[] paths = null;
-		if (path.contains("*"))
-			paths = path.split("/");
-		else
-			paths = new String[] { path };
-		final String pathPattern = path.replace("/**", "(/.*)?");
-		//System.out.println(pathPattern);
-
-		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(paths[0]);
-		while (urls.hasMoreElements()) {
-			//			 URL u = urls.nextElement();
-			scanResult.add(urls.nextElement());
-			//			 System.out.println(u.getFile());
-			// System.out.println(u.getFile().replace(File.separator, "/"));
-			// System.err.println(u.getFile().substring(u.getFile().indexOf(paths[0])));
-			// 第一段完成，遍历所有路径,再正则
-			// jar
+		paths = path.split(",");
+		String[] fullPaths = paths;
+		//后期换并发模式
+		for (int i = 0, len = paths.length; i < len; i++) {
+			Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(paths[i].contains("*") ? paths[i].split("/")[0] : paths[i]);
+			Set<URL> scanResult = new LinkedHashSet<URL>();
+			while (urls.hasMoreElements()) {
+				//			 URL u = urls.nextElement();
+				scanResult.add(urls.nextElement());
+				//			 System.out.println(u.getFile());
+				// System.out.println(u.getFile().replace(File.separator, "/"));
+				// System.err.println(u.getFile().substring(u.getFile().indexOf(paths[0])));
+				// 第一段完成，遍历所有路径,再正则
+				// jar
+			}
+			result.addAll(classMatchFilter(fullPaths[i], scanResult));
 		}
-		return classMatchFilter(path, scanResult);
+		try {
+			return result;
+		} finally {
+			executorService.shutdown();
+		}
 	}
 
 	protected static final Set<String> classMatchFilter(String path, Set<URL> paths) throws InterruptedException, ExecutionException {
@@ -74,7 +72,6 @@ public class Scan {
 			else
 				fileClassPaths.add(u);
 		}
-		ExecutorService executorService = ExcutorServiceFatory.getSingleExector();
 		//过滤
 		futures.add(executorService.submit(new Scan.FileFilter(jarClassPaths, pathPattern, 0, countDownLatch) {
 			@Override
@@ -93,38 +90,9 @@ public class Scan {
 			}
 		}));
 		countDownLatch.await();
-		//		executorService.shutdown();
+
 		result.addAll(futures.get(0).get());
 		result.addAll(futures.get(1).get());
-		//		Iterator<String> it = result.iterator();
-		//		while (it.hasNext())
-		//			System.err.println(it.next());
-		//		Iterator<URL> it = paths.iterator();
-		//		URL u = null;
-		//		while (it.hasNext()) {
-		//			u = it.next();
-		//			if (u.getProtocol().equals("jar"))
-		//				try {
-		//					JarFile jarFile = new JarFile(new File(u.getPath().substring(0, u.getPath().lastIndexOf("!")).replaceAll("file:", "")));
-		//					Enumeration<JarEntry> jars = jarFile.entries();
-		//					while (jars.hasMoreElements()) {
-		//						JarEntry jarEntry = jars.nextElement();
-		//						if (jarEntry.getName().matches(pathPattern)) {
-		//							// System.out.println("-----------:" + jarEntry.getName());
-		//							System.out.println("-----------:" + jarEntry.getName().substring(jarEntry.getName().lastIndexOf("/") + 1, jarEntry.getName().lastIndexOf(".")));
-		//							jarResult.put(jarEntry.getName().substring(jarEntry.getName().lastIndexOf("/") + 1, jarEntry.getName().lastIndexOf(".")), jarEntry.getName());
-		//						}
-		//					}
-		//				} catch (Exception e) {
-		//					e.printStackTrace();
-		//				}
-		//			else
-		//				// File
-		//				fileResult.putAll(fileClassFilter(new File(u.getPath()), pathPattern, startIndex));
-		//			// System.out.println(pathPattern);
-		//		}
-		//		for (Entry<String, String> en : fileResult.entrySet())
-		//			System.err.println(en.getValue());
 
 		return result;
 	}
@@ -140,10 +108,6 @@ public class Scan {
 			while (jars.hasMoreElements()) {
 				JarEntry jarEntry = jars.nextElement();
 				if (jarEntry.getName().matches(pathPattern)) {
-					// System.out.println("-----------:" + jarEntry.getName());
-					//System.out.println("-----------:" + jarEntry.getName().substring(jarEntry.getName().lastIndexOf("/") + 1, jarEntry.getName().lastIndexOf(".")));
-					//result.put(jarEntry.getName().substring(jarEntry.getName().lastIndexOf("/") + 1, jarEntry.getName().lastIndexOf(".")), jarEntry.getName());
-					//System.out.println("-----------:" + jarEntry.getName().replace("/", "."));
 					result.add(jarEntry.getName().replace("/", "."));
 				}
 			}
@@ -157,12 +121,14 @@ public class Scan {
 		if (file.isFile()) {
 			if (file.getPath().replace(File.separator, "/").matches(pathPattern))
 				//result.put(file.getName(), file.getPath().substring(startIndex).replace(".class", "").replace(File.separator, "."));
+				//文件添加返回
 				result.add(file.getPath().substring(startIndex).replace(".class", "").replace(File.separator, "."));
 			return result;
 		}
 		else if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (File f : files) {
+				//目录递归
 				result.addAll(fileTypeFilter(f, pathPattern, startIndex));
 			}
 		}
@@ -209,7 +175,8 @@ public class Scan {
 
 		// doScan("antlr/actions");
 		//		Set<String> result = doScan("org/**/orm/hibernate4");
-		Set<String> result = doScan("com");
+		//		Set<String> result = doScan("com");
+		Set<String> result = doScan("javassist/**/annotation,com");
 		Iterator<String> it = result.iterator();
 		while (it.hasNext())
 			System.err.println(it.next());

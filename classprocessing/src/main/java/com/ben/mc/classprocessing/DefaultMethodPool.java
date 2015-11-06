@@ -1,9 +1,10 @@
 package com.ben.mc.classprocessing;
 
+import java.lang.annotation.Retention;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.ben.mc.util.Util;
+import org.junit.After;
 
 public class DefaultMethodPool implements MethodPool {
 
@@ -18,7 +19,8 @@ public class DefaultMethodPool implements MethodPool {
 	}
 
 	private Map<String, Object> getSource() {
-		Cache
+		//		Cache
+		return null;
 	}
 
 	public Method getMethod(Class clazz, String methodName) {
