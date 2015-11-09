@@ -27,6 +27,6 @@
 		<module>mc-util</module>
 		<module>mc-classprocessing</module>
 		<module>mc-annotation</module>
-		<module>mc-AnthingTest</module>
+		<module>mc-anthing-test</module>
 	</modules>
 </project>
