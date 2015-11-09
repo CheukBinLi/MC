@@ -9,9 +9,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.ben</groupId>
-	<artifactId>AnthingTest</artifactId>
+	<artifactId>mc-anthingTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>AnthingTest</name>
+	<name>mc-anthingTest</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 	</dependencies>

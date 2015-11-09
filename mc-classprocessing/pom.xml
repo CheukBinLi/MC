@@ -9,26 +9,26 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.ben</groupId>
-	<artifactId>classprocessing</artifactId>
+	<artifactId>mc-classprocessing</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>classprocessing</name>
+	<name>mc-classprocessing</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>com.ben</groupId>
-			<artifactId>util</artifactId>
+			<artifactId>mc-util</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.ben</groupId>
-			<artifactId>scan</artifactId>
+			<artifactId>mc-scan</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.ben</groupId>
-			<artifactId>cache</artifactId>
+			<artifactId>mc-cache</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

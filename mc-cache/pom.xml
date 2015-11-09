@@ -8,9 +8,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.ben</groupId>
-  <artifactId>cache</artifactId>
+  <artifactId>mc-cache</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>cache</name>
+  <name>mc-cache</name>
   <url>http://maven.apache.org</url>
   <dependencies>
   </dependencies>
