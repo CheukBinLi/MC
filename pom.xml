@@ -22,11 +22,11 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>cache</module>
-		<module>scan</module>
-		<module>util</module>
-		<module>classprocessing</module>
-		<module>annotation</module>
-		<module>AnthingTest</module>
+		<module>mc-cache</module>
+		<module>mc-scan</module>
+		<module>mc-util</module>
+		<module>mc-classprocessing</module>
+		<module>mc-annotation</module>
+		<module>mc-AnthingTest</module>
 	</modules>
 </project>
