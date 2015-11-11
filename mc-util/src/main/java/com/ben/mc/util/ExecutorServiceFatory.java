@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ExcutorServiceFatory {
+public class ExecutorServiceFatory {
 	static int MAX_QUEUE = 15;
 	static int QUEUE = 5;
 	static int mix = 2;
