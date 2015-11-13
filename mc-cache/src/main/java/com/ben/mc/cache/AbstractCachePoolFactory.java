@@ -5,10 +5,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 
 	public abstract Pool<Object> getCache();
+
+	protected boolean isConcurrent = false;
+
+	public AbstractCachePoolFactory(boolean isConcurrent) {
+		super();
+		this.isConcurrent = isConcurrent;
+	}
 
 	public <T> T get(Object o) {
 		return (T) getCache().get(o);
@@ -37,7 +46,10 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		Object obj = getCache().get(key);
 		List<Object> temp = null;
 		if (null == obj) {
-			temp = new ArrayList<Object>();
+			if (isConcurrent)
+				temp = new CopyOnWriteArrayList<Object>();
+			else
+				temp = new ArrayList<Object>();
 			getCache().put(key, temp);
 		}
 		else
@@ -45,7 +57,11 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		obj = null;
 		List<Object> X = null;
 		int size = floor.length;
-		List<Integer> path = new ArrayList<Integer>();
+		List<Integer> path;
+		if (isConcurrent)
+			path = new CopyOnWriteArrayList<Integer>();
+		else
+			path = new ArrayList<Integer>();
 		for (int i = 0; i < size - 1; i++) {
 			//长度
 			if (floor[i] < temp.size()) {
@@ -58,7 +74,11 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 			}
 			//大于
 			else {
-				temp.add(obj = new ArrayList<Object>());
+				if (isConcurrent)
+					obj = new CopyOnWriteArrayList<Object>();
+				else
+					obj = new ArrayList<Object>();
+				temp.add(obj);
 				path.add(temp.size() - 1);
 				temp = (List<Object>) obj;
 			}
@@ -85,19 +105,22 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 				result = ((Map<Object, Object>) result).get(key[i]);
 			} catch (Exception e) {
 				System.err.println("层次节目转换失败：key:" + Arrays.asList(key) + "出错节目:" + key[i - 1] + " 节目值:" + result);
-				// e.printStackTrace();
+				e.printStackTrace();
 				return null;
 			}
 		}
 		return (T) result;
 	}
 
-	public void addNFloop4Map(Object value, Object... key) {
+	public Object addNFloop4Map(Object value, Object... key) {
 		Object obj = get(key[0]);// 第一节
 		Map container = null;
 		Object node;// 第n个节点
 		if (null == obj) {
-			obj = new HashMap<Object, Object>();
+			if (isConcurrent)
+				obj = new ConcurrentHashMap<Object, Object>();
+			else
+				obj = new HashMap<Object, Object>();
 			put(key[0], obj);// 添加第一节
 		}
 		container = (Map) obj;
@@ -105,14 +128,16 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 			// System.out.println("put:" + key[i]);
 			node = container.get(key[i]);
 			if (null == node) {
-				node = new HashMap<Object, Object>();
+				if (isConcurrent)
+					node = new ConcurrentHashMap<Object, Object>();
+				else
+					node = new HashMap<Object, Object>();
 				container.put(key[i], node);
 			}
 			container = (Map) node;// 下一节
 		}
 		//		System.out.println("key:" + key[key.length - 1]+"   "+value);
-		container.put(key[key.length - 1], value);
-		String a="";
+		return container.put(key[key.length - 1], value);
 	}
 
 	public static void main(String[] args) throws Exception {

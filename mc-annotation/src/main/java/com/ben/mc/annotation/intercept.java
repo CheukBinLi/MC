@@ -1,5 +1,6 @@
 package com.ben.mc.annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -7,15 +8,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /***
- * 拦截器
+ * 方法拦截
  * @author hnbh
  *
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface Intercept {
+@Documented
+public @interface intercept {
 
-	String[] value();
+	public String value() default "";
 
 }

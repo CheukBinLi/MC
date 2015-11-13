@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -14,13 +16,16 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
 
-import com.ben.mc.util.ConstantType;
+import com.ben.mc.annotation.Register;
+import com.ben.mc.scan.Scan;
 import com.ben.mc.util.Util;
 
 import create.old;
 
-public class DefaultClassProcessing extends AbstractClassProcessingFactory {
+public class DefaultClassProcessing extends DefaultClassProcessingFactory {
 
 	@Override
 	public ClazzInfo classProcessing(Class clazzz) throws NotFoundException, CannotCompileException {
@@ -31,11 +36,10 @@ public class DefaultClassProcessing extends AbstractClassProcessingFactory {
 	public ClazzInfo classProcessing(String clazzName) throws NotFoundException, CannotCompileException {
 		ClassPool classPool = ClassPool.getDefault();
 		CtClass cz = classPool.get(clazzName);
-
 		classPool.importPackage(clazzName);//继承
 		classPool.importPackage("java.lang.reflect.Method");//添加反射引用
 
-		CtClass newClass = classPool.makeClass(clazzName + ConstantType.CLASS_IMPL_SUFFIX);//新建代理类
+		CtClass newClass = classPool.makeClass(clazzName + Impl);//新建代理类
 		newClass.setSuperclass(cz);//继承
 
 		//构造块
@@ -93,10 +97,49 @@ public class DefaultClassProcessing extends AbstractClassProcessingFactory {
 		return new ClazzInfo(newClass.toClass(), tempMethod);
 	}
 
-	public static void main(String[] args) throws NotFoundException, CannotCompileException, InstantiationException, IllegalAccessException {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, NotFoundException, CannotCompileException {
+		//		1.0
 		old o = (old) ((ClazzInfo) new DefaultClassProcessing().classProcessing(old.class)).getClazz().newInstance();
 		o.setFX("mba");
 		System.out.println(o.getFX());
 		o.x();
+		//2.0
+
+		//		Map<String, CtClass>result=Scan.doScan("com.");
+
+	}
+
+	public void first(Set<String> classNames) throws NotFoundException, ClassNotFoundException {
+		//扫描注册
+		ClassPool classPool = ClassPool.getDefault();
+		String tempClassName = null;
+		Class register = Register.class;
+		CtClass clazz;
+		Object isRegister;
+		Iterator<String> it = classNames.iterator();
+		while (it.hasNext()) {
+			tempClassName = it.next();
+			clazz = classPool.get(tempClassName);
+			isRegister = clazz.getAnnotation(register);
+
+			AnnotationsAttribute a = (AnnotationsAttribute) clazz.getClassFile2().getAttribute(AnnotationsAttribute.visibleTag);
+			Annotation[] as = a.getAnnotations();
+			for (Annotation an : as) {
+				//				System.out.println(String.format("MemberNames:%s ", an.getMemberNames()));
+				Set anSet = an.getMemberNames();
+				Iterator anit = anSet.iterator();
+				while (anit.hasNext()) {
+					System.out.println("type:" + anit.next().getClass());
+				}
+				//			AnnotationsAttribute a = (AnnotationsAttribute) clazz.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
+				//				for()
+			}
+			System.err.println(a);
+			System.err.println(a);
+			//			System.err.println(a.getName());
+
+			if (null != isRegister)
+				System.out.println(isRegister);
+		}
 	}
 }

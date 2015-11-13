@@ -25,7 +25,7 @@ public interface CachePoolFactory {
 
 	public Object putList(Object o, Object... values);
 
-	public void addNFloop4Map(Object value, Object... key);
+	public Object addNFloop4Map(Object value, Object... key);
 
 	/***
 	 * 

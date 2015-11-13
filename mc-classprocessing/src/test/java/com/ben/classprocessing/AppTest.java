@@ -1,38 +1,42 @@
 package com.ben.classprocessing;
 
-import junit.framework.Test;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.Test;
+import org.springframework.orm.hibernate4.testAA.xxxx;
+
+import javassist.NotFoundException;
+
+import com.ben.mc.classprocessing.DefaultClassProcessing;
+
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class AppTest extends TestCase {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+	public void firstTest() {
+		Set<String> clazz = new HashSet<String>();
+		clazz.add(xxxx.class.getCanonicalName());
+		System.err.println(xxxx.class.getCanonicalName());
+		try {
+			new DefaultClassProcessing().first(clazz);
+		} catch (ClassNotFoundException | NotFoundException e) {
+			e.printStackTrace();
+		}
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+	}
+
+	public static void main(String[] args) {
+		Set<String> clazz = new HashSet<String>();
+		System.err.println(xxx.class.getCanonicalName());
+		clazz.add(xxx.class.getCanonicalName());
+		try {
+			new DefaultClassProcessing().first(clazz);
+		} catch (ClassNotFoundException | NotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 }

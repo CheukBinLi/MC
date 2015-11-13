@@ -21,14 +21,15 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ben.mc.util.ExcutorServiceFatory;
+import com.ben.mc.util.ExecutorServiceFatory;
 
 public class Scan {
 
-	private static final ExecutorService executorService = ExcutorServiceFatory.getExector();
+	private static final ExecutorService executorService = ExecutorServiceFatory.getExector();
 
 	public static final Set<String> doScan(String path) throws IOException, InterruptedException, ExecutionException {
 		Set<String> result = new HashSet<String>();
+		path = path.replace(".", "/");
 		path = path.replace(File.separator, "/");
 		String[] paths = null;
 		paths = path.split(",");

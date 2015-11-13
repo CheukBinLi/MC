@@ -1,5 +1,6 @@
 package create;
 
+
 public class old {
 
 	private String FX = "FxField";
@@ -7,7 +8,7 @@ public class old {
 	public void x() {
 		System.out.println(this);
 		System.out.println(getClass().getName());
-		System.out.println("field-FX:"+FX);
+		System.out.println("field-FX:" + FX);
 	}
 
 	public old(int a) {

@@ -1,10 +1,7 @@
 package com.ben.mc.classprocessing;
 
-import java.lang.annotation.Retention;
 import java.lang.reflect.Method;
 import java.util.Map;
-
-import org.junit.After;
 
 public class DefaultMethodPool implements MethodPool {
 

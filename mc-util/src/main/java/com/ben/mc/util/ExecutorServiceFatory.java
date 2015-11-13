@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
@@ -16,7 +17,8 @@ public class ExecutorServiceFatory {
 	static int MAX_QUEUE = 15;
 	static int QUEUE = 5;
 	static int mix = 2;
-	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+	//	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = new ForkJoinPool();
 	static final BlockingQueue<ExecutorService> EXECUTOR_SERVICES = new LinkedBlockingDeque<ExecutorService>();
 	static final BlockingDeque<Integer> SUPPLEMENT = new LinkedBlockingDeque<Integer>();
 	static final BlockingDeque<ExecutorService> RUNING_POOL = new LinkedBlockingDeque<ExecutorService>();

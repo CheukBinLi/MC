@@ -11,7 +11,7 @@ public class DefaultPool implements Pool<Object> {
 
 	private static final DefaultPool newInstance = new DefaultPool();
 
-	private DefaultPool() {
+	protected DefaultPool() {
 	}
 
 	public static final DefaultPool newInstance() {
