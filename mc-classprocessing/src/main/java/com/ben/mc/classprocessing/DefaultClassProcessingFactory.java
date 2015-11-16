@@ -1,5 +1,6 @@
 package com.ben.mc.classprocessing;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,10 +29,6 @@ import com.ben.mc.util.ExecutorServiceFatory;
 import com.ben.mc.util.ShortNameUtil;
 
 public abstract class DefaultClassProcessingFactory implements ClassProcessingFactory<CtClass> {
-
-	public abstract ClazzInfo classProcessing(Class clazz) throws Throwable;
-
-	public abstract ClazzInfo classProcessing(String clazz) throws Throwable;
 
 	@Override
 	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, List<String> xmlAppendList) throws InterruptedException {
@@ -115,6 +112,8 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 					if (name.length() > 0)
 						cache.get(NICK_NAME_CACHE).put(name, clazz.getName());
 					cache.get(REGISTER_CACHE).put(clazz.getName(), clazz);
+					Object x = clazz;
+					System.err.println("xxxxxx:" + x);
 					//					cache.get(SHORT_NAME_CACHE).put(clazz.getName(), ClassProcessingFactory.SHORT_NAME_CACHE, ShortNameUtil.makeShortName(clazz.getName()));
 
 					BeanFactory.addCache(clazz.getName(), ClassProcessingFactory.SHORT_NAME_CACHE, ShortNameUtil.makeShortName(clazz.getName()));
@@ -141,6 +140,9 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		Iterator<Entry<String, CtClass>> it = classCache.get(REGISTER_CACHE).entrySet().iterator();
 
 		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
+		List<String> imports = new ArrayList<String>();
+		List<String> injections = new ArrayList<String>();
+
 		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
 		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
 		//		Map<String, CtClass> A3 = new HashMap<String, CtClass>();
@@ -157,15 +159,47 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			CtClass newClazz = tempClazz.getClassPool().makeClass(tempClazz.getName() + Impl);
 			newClazz.getClassPool().importPackage(en.getKey());
 			newClazz.setSuperclass(tempClazz);
-			//nickName
-			//			Register register = (Register) tempClazz.getAnnotation(Register.class);
-			//			if (null != register.value())
-			//				nickNameClass.put(register.value(), newClazz);
 
+			//搜索Feld
+			//搜索Method
+
+			//构造加载、引包
+
+			//建立构造
+			CtField[] ctFields = tempClazz.getDeclaredFields();
+			//			CtField newField;
+			ClassProcessingHandler<CtClass, AutoLoad, CtMember, DefaultAutoLoadHandler.AutoLoadList> cph = new DefaultAutoLoadHandler();
+			//			<O, A, I, R> 
+			for (CtField f : ctFields) {
+				if (null != cph.getCheck(f)) {
+					//					newClazz.addField((CtField) cph.doProcessing(classCache, newClazz, f));
+					DefaultAutoLoadHandler.AutoLoadList a = cph.doProcessing(classCache, newClazz, f);
+					imports.add(a.getImports());
+					injections.add(a.getField());
+					level++;
+				}
+			}
+			if (level == 0)
+				A1.put(en.getKey(), newClazz);
+			else
+				A2.put(en.getKey(), newClazz);
 			//构造块
 			CtConstructor tempC;
 			CtConstructor[] ctConstructors = tempClazz.getDeclaredConstructors();
-			newClazz.addConstructor(CtNewConstructor.defaultConstructor(newClazz));
+			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
+			StringBuffer sb = new StringBuffer("{");
+			sb.append("super($$);");
+			if (injections.size() > 0) {
+				sb.append("try {");
+				for (String s : injections) {
+					sb.append(s);
+				}
+				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
+			}
+			sb.append("}");
+			defauleConstructor.setBody(sb.toString());
+			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
+			newClazz.addConstructor(defauleConstructor);
 			try {
 				for (CtConstructor c : ctConstructors) {
 					tempC = CtNewConstructor.copy(c, newClazz, null);
@@ -175,52 +209,18 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			} catch (DuplicateMemberException e) {
 				//				e.printStackTrace();
 			}
-			//FIELD 注入
-			CtField[] ctFields = tempClazz.getDeclaredFields();
-			CtField newField;
-			ClassProcessingHandler<CtClass, AutoLoad, CtMember> cph = new DefaultAutoLoadHandler();
-			for (CtField f : ctFields) {
-				if (null != cph.getCheck(f)) {
-					newClazz.addField((CtField) cph.doProcessing(classCache, newClazz, f));
-				}
-				//				Object o = f.getAnnotation(AutoLoad.class);
-				//				if (null != o) {
-				//					Iterator<Entry<String, CtClass>> autoIt = clazzs.entrySet().iterator();
-				//					System.err.println(f.getType().getName());
-				//					Entry<String, CtClass> tempEn;
-				//					while (autoIt.hasNext()) {
-				//						tempEn = autoIt.next();
-				//						//模糊匹配
-				//						if (tempEn.getValue().subtypeOf(f.getType())) {
-				//							autoLoadClass.put(f.getType().getName(), tempEn.getValue().getName());//自动装载
-				//							String a = String.format("%s %s %s=new %s%s();", Modifier.toString(f.getModifiers()), f.getType().getName(), f.getName(), tempEn.getValue().getName(), Impl);
-				//							System.err.println(a);
-				//							newClazz.getClassPool().importPackage(tempEn.getValue().getName());//import
-				//							newField = CtField.make(a, newClazz);
-				//							newClazz.addField(newField);
-				//							level = 1;
-				//							break;
-				//							//							System.out.println("bbbbbbbbbbbbbbb:" + tempEn.getValue().getName());
-				//							//						CtClass a1 = f.getType();
-				//							//						CtClass a2 = tempEn.getValue();
-				//							//						System.err.println(String.format("%s----subType----:%s  : %s", f.getName(), tempEn.getValue().getName(), a2.subtypeOf(a1)));
-				//							//						System.err.println(String.format("%s----superType----:%s  : %s", f.getName(), tempEn.getValue().getName(), a2.subtypeOf(a1)));
-				//							//						f.getType().getClass().isAssignableFrom(tempEn.getValue().getClass());
-				//						}
-				//					}
-				//
-				//				}
-			}
-			if (level == 0)
-				A1.put(en.getKey(), newClazz);
-			else
-				A2.put(en.getKey(), newClazz);
+
+			//Import
+			for (String s : imports)
+				newClazz.getClassPool().importPackage(s);
+			newClazz.getClassPool().importPackage("java.lang.Exception");
+			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
 			//反编查看
-			//			try {
-			//				newClazz.writeFile("C:/Users/Ben/Desktop");
-			//			} catch (IOException e) {
-			//				e.printStackTrace();
-			//			}
+			try {
+				tempClazz.writeFile("C:/Users/Ben/Desktop");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		anthingToClass(compileObject);
 	}
@@ -232,8 +232,28 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 				final Class c = en.getValue().toClass();
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
+				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
+				try {
+					en.getValue().writeFile("C:/Users/Ben/Desktop");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
 	}
+
+	//	static {
+	//		{
+	//			super($$);
+	//			try {
+	//				Field fields = this.getClass().getSuperclass().getDeclaredField("autoLoadTestImpl");
+	//				fields.setAccessible(true);
+	//				fields.set(this, new com.ben.mc.AnthingTest.AutoLoadTestImpl$MC_IMPL());
+	//			} catch (java.lang.Exception e) {
+	//			}
+	//		}
+	//
+	//	}
 }

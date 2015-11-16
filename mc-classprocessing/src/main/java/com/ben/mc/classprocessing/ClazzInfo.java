@@ -12,10 +12,11 @@ import com.ben.mc.util.Util;
 import create.old;
 
 /***
- * 类信息
+ * 类信息 废弃
  * @author hnbh
  *
  */
+@Deprecated
 public class ClazzInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;

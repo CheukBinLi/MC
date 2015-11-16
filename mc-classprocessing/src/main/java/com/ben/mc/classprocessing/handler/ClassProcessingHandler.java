@@ -25,11 +25,11 @@ import javassist.CtClass;
  * @param <O> 传入要解释的ctclazz
  * @param <A> annotation对象
  */
-public interface ClassProcessingHandler<O, A, X> {
+public interface ClassProcessingHandler<O, A, I, R> {
 
 	Class<A> handlerClass();
 
-	public A getCheck(X x) throws Throwable;
+	public A getCheck(I x) throws Throwable;
 
 	/***
 	 * 
@@ -41,6 +41,6 @@ public interface ClassProcessingHandler<O, A, X> {
 	 * @param additional 附加对像 ctfield/ctmethod...
 	 * @return 装拼完成的对象
 	 */
-	public X doProcessing(Map<String, Map> cache, O t, X additional) throws Throwable;
+	public R doProcessing(Map<String, Map> cache, O t, I additional) throws Throwable;
 
 }

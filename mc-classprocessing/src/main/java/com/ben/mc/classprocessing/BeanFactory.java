@@ -4,13 +4,15 @@ import com.ben.mc.cache.DefaultCachePoolFactory;
 
 public class BeanFactory {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public static <T> T getBean(String name) throws InstantiationException, IllegalAccessException {
 		Class A;
 		A = DefaultCachePoolFactory.newInstance().get4Map(ClassProcessingFactory.NICK_NAME_BEAN, name);
 		if (null == A)
 			A = DefaultCachePoolFactory.newInstance().get4Map(ClassProcessingFactory.FULL_NAME_BEAN, name);
-		if (null == A)
+		else if (null == A)
+			A = DefaultCachePoolFactory.newInstance().get4Map(ClassProcessingFactory.SHORT_NAME_BEAN, name);
+		else if (null == A)
 			return null;
 		return (T) A.newInstance();
 	}

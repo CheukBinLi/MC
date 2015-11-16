@@ -2,8 +2,7 @@ package com.ben.mc.classprocessing.handler;
 
 import javassist.CtMember;
 
-public abstract class AbstractClassProcessingHandler<O, A> implements ClassProcessingHandler<O, A, CtMember> {
-
+public abstract class AbstractClassProcessingHandler<O, A, R> implements ClassProcessingHandler<O, A, CtMember, R> {
 	protected A a;
 
 	@SuppressWarnings("unchecked")

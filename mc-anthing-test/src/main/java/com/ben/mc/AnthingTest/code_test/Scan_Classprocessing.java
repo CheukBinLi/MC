@@ -10,9 +10,11 @@ import javassist.CtClass;
 
 import com.ben.mc.AnthingTest.AutoLoadTestI;
 import com.ben.mc.AnthingTest.AutoLoadTestImpl;
+import com.ben.mc.AnthingTest.IocTest1;
 import com.ben.mc.classprocessing.BeanFactory;
 import com.ben.mc.classprocessing.ClassProcessingFactory;
 import com.ben.mc.classprocessing.DefaultClassProcessing;
+import com.ben.mc.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.scan.Scan;
 
 public class Scan_Classprocessing {
@@ -25,7 +27,8 @@ public class Scan_Classprocessing {
 		//		o.x();
 		//2.0
 
-		ClassProcessingFactory<CtClass> classProcessingFactory = new DefaultClassProcessing();
+		ClassProcessingFactory<CtClass> classProcessingFactory = new DefaultClassProcessingFactory() {
+		};
 
 		Map<String, CtClass> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"), null);
 
@@ -33,8 +36,10 @@ public class Scan_Classprocessing {
 			System.out.println(en.getValue().getName());
 
 		//		Thread.sleep(50);
-		AutoLoadTestI i = BeanFactory.getBean("autoLoadTestImpl");
-		i.hello("王小牛");
+		//		AutoLoadTestI i = BeanFactory.getBean("autoLoadTestI");
+		//		i.hello("王小牛");
+		IocTest1 i = BeanFactory.getBean("iocTest1");
+		i.aaxx("王小牛");
 
 	}
 }

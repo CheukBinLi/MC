@@ -2,7 +2,7 @@ package com.ben.mc.AnthingTest;
 
 import com.ben.mc.annotation.Register;
 
-@Register("IocTest2")
+@Register
 public class IocTest2 {
 
 }

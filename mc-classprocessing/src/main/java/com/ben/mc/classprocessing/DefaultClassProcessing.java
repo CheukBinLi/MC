@@ -25,21 +25,37 @@ import com.ben.mc.util.Util;
 
 import create.old;
 
-public class DefaultClassProcessing extends DefaultClassProcessingFactory {
+/***
+ * 
+ * Copyright 2015    ZHOU.BING.LI Individual All
+ *  
+ * ALL RIGHT RESERVED
+ *  
+ * CREATE ON 2015年11月13日 下午5:30:54
+ *  
+ * EMAIL:20796698@QQ.COM
+ *  
+ * GITHUB:https://github.com/fdisk123
+ * 
+ * @author ZHUO.BIN.LI
+ * 
+ * @see 废弃
+ *
+ */
+@Deprecated
+public class DefaultClassProcessing {
 
-	@Override
 	public ClazzInfo classProcessing(Class clazzz) throws NotFoundException, CannotCompileException {
 		return classProcessing(clazzz.getCanonicalName());
 	}
 
-	@Override
 	public ClazzInfo classProcessing(String clazzName) throws NotFoundException, CannotCompileException {
 		ClassPool classPool = ClassPool.getDefault();
 		CtClass cz = classPool.get(clazzName);
 		classPool.importPackage(clazzName);//继承
 		classPool.importPackage("java.lang.reflect.Method");//添加反射引用
 
-		CtClass newClass = classPool.makeClass(clazzName + Impl);//新建代理类
+		CtClass newClass = classPool.makeClass(clazzName + "$MC_IMPL");//新建代理类
 		newClass.setSuperclass(cz);//继承
 
 		//构造块
