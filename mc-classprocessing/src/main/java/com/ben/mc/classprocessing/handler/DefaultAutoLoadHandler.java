@@ -17,25 +17,24 @@ import com.ben.mc.util.ShortNameUtil;
 
 /***
  * 
- * Copyright 2015    ZHOU.BING.LI Individual All
- *  
+ * Copyright 2015 ZHOU.BING.LI Individual All
+ * 
  * ALL RIGHT RESERVED
- *  
+ * 
  * CREATE ON 2015年11月13日 下午5:25:57
- *  
+ * 
  * EMAIL:20796698@QQ.COM
- *  
+ * 
  * GITHUB:https://github.com/fdisk123
  * 
  * @author ZHUO.BIN.LI
  * 
- * @see 默认  自动装载处理器
+ * @see 默认 自动装载处理器
  *
  */
 public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
 	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional) throws Throwable {
 		Object bx = newClass.getConstructors();
 		CtField o = (CtField) additional;
@@ -111,7 +110,6 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		return String.format(" %s=new %s%s();", o.getName(), implClassName, ClassProcessingFactory.Impl);
 	}
 
-	@Override
 	public Class<AutoLoad> handlerClass() {
 		return AutoLoad.class;
 	}

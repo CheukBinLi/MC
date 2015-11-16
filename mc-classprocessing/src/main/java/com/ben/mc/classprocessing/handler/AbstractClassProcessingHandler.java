@@ -6,7 +6,6 @@ public abstract class AbstractClassProcessingHandler<O, A> implements ClassProce
 	protected A a;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public A getCheck(CtMember clazz) throws ClassNotFoundException {
 		Object o = clazz.getAnnotation(handlerClass());
 		if (null != o) {

@@ -1,6 +1,8 @@
 package com.ben.mc.classprocessing;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +33,6 @@ import com.ben.mc.util.ShortNameUtil;
 
 public abstract class DefaultClassProcessingFactory implements ClassProcessingFactory<CtClass> {
 
-	@Override
 	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, List<String> xmlAppendList) throws InterruptedException {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
 		final ConcurrentHashMap<String, String> nick = new ConcurrentHashMap<String, String>();
@@ -94,7 +95,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		}
 
 		@SuppressWarnings("unchecked")
-		@Override
 		public void run() {
 			try {
 				int count = 1;
@@ -238,6 +238,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
 				//搜索class
+
 				try {
 					en.getValue().writeFile("C:/Users/Ben/Desktop");
 				} catch (IOException e) {
@@ -249,6 +250,34 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 
 	}
 
+	private ClassInfo scanClass(Class c, boolean isConcurrent) {
+		Map<String, Field> fields = null;
+		Map<String, Method> methods = null;
+		if (isConcurrent) {
+			final Map<String, Field> f = new ConcurrentHashMap<String, Field>();
+			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
+			fields = f;
+			methods = m;
+		} else {
+			final Map<String, Field> f = new HashMap<String, Field>();
+			final Map<String, Method> m = new HashMap<String, Method>();
+			fields = f;
+			methods = m;
+		}
+		Field[] fs = c.getDeclaredFields();
+		Method[] ms = c.getDeclaredMethods();
+		for (Field f : fs) {
+			f.setAccessible(true);
+			fields.put(f.getName(), f);
+		}
+		for (Method m : ms) {
+			m.getParameters()
+			methods.put(m.getName(), m)
+		}
+		ClassInfo ci = new ClassInfo(c.getName(), c, fields, methods);
+
+		return null;
+	}
 	//	static {
 	//		{
 	//			super($$);

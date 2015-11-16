@@ -35,7 +35,7 @@ public class Scan_Classprocessing {
 		//		AutoLoadTestI i = BeanFactory.getBean("autoLoadTestI");
 		//		i.hello("王小牛");
 		IocTest1 i = BeanFactory.getBean("iocTest1");
-		i.aaxx("王小牛");
+		i.aaxx("王小牛0_0");
 
 	}
 }
