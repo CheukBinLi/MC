@@ -63,9 +63,15 @@ public class ClassInfo {
 
 	public ClassInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
+	/***
+	 * 
+	 * @param name 名称
+	 * @param clazz 扩展用：null
+	 * @param fields  字段
+	 * @param methods 方法
+	 */
 	public ClassInfo(String name, Class clazz, Map<String, Field> fields, Map<String, Method> methods) {
 		super();
 		this.name = name;

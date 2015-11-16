@@ -32,11 +32,11 @@ import com.ben.mc.util.ShortNameUtil;
  * @see 默认  自动装载处理器
  *
  */
-public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad, DefaultAutoLoadHandler.AutoLoadList> {
+public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public AutoLoadList doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional) throws Throwable {
+	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional) throws Throwable {
 		Object bx = newClass.getConstructors();
 		CtField o = (CtField) additional;
 		Iterator<Entry<String, CtClass>> autoIt = cache.get(ClassProcessingFactory.REGISTER_CACHE).entrySet().iterator();
@@ -44,7 +44,6 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		String nick;
 		//命名匹配
 		if (this.a.value().length() > 0) {
-			System.out.println(this.a.value());
 			nick = cache.get(ClassProcessingFactory.NICK_NAME_CACHE).get(this.a.value()).toString();
 			if (null != nick) {
 				//				o = CtField.make(makeField(o, ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(nick)).getName()), newClass);
@@ -55,8 +54,10 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				sb.append("Field fields = this.getClass().getSuperclass().getDeclaredField(\"").append(o.getName()).append("\");");
 				sb.append("fields.setAccessible(true);");
 				sb.append("fields.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
+
 				System.err.println(sb.toString());
-				return new AutoLoadList(sb.toString(), nick);
+				return new HandlerInfo(sb.toString(), nick);
+
 			}
 
 		}
@@ -72,7 +73,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 			sb.append("fields.setAccessible(true);");
 			sb.append("fields.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
 			System.err.println(sb.toString());
-			return new AutoLoadList(sb.toString(), nick);
+			return new HandlerInfo(sb.toString(), nick);
 		}
 
 		while (autoIt.hasNext()) {
@@ -99,7 +100,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				sb.append("fields.setAccessible(true);");
 				sb.append("fields.set(this, new ").append(tempEn.getValue().getName() + DefaultClassProcessingFactory.Impl).append("());");
 				System.err.println(sb.toString());
-				return new AutoLoadList(sb.toString(), tempEn.getValue().getName());
+				return new HandlerInfo(sb.toString(), tempEn.getValue().getName());
 			}
 		}
 		throw new Throwable("can find matching class !");
@@ -114,33 +115,4 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 	public Class<AutoLoad> handlerClass() {
 		return AutoLoad.class;
 	}
-
-	public static class AutoLoadList {
-		private String field;
-		private String imports;
-
-		public String getField() {
-			return field;
-		}
-
-		public void setField(String field) {
-			this.field = field;
-		}
-
-		public String getImports() {
-			return imports;
-		}
-
-		public void setImports(String imports) {
-			this.imports = imports;
-		}
-
-		public AutoLoadList(String field, String imports) {
-			super();
-			this.field = field;
-			this.imports = imports;
-		}
-
-	}
-
 }

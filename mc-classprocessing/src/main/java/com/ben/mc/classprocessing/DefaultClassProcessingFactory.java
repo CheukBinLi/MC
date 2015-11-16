@@ -25,6 +25,7 @@ import com.ben.mc.annotation.AutoLoad;
 import com.ben.mc.annotation.Register;
 import com.ben.mc.classprocessing.handler.ClassProcessingHandler;
 import com.ben.mc.classprocessing.handler.DefaultAutoLoadHandler;
+import com.ben.mc.classprocessing.handler.HandlerInfo;
 import com.ben.mc.util.ExecutorServiceFatory;
 import com.ben.mc.util.ShortNameUtil;
 
@@ -140,8 +141,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		Iterator<Entry<String, CtClass>> it = classCache.get(REGISTER_CACHE).entrySet().iterator();
 
 		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
-		List<String> imports = new ArrayList<String>();
-		List<String> injections = new ArrayList<String>();
+		List<HandlerInfo> handlerInfos = new ArrayList<HandlerInfo>();
 
 		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
 		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
@@ -161,6 +161,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			newClazz.setSuperclass(tempClazz);
 
 			//搜索Feld
+
 			//搜索Method
 
 			//构造加载、引包
@@ -168,14 +169,15 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			//建立构造
 			CtField[] ctFields = tempClazz.getDeclaredFields();
 			//			CtField newField;
-			ClassProcessingHandler<CtClass, AutoLoad, CtMember, DefaultAutoLoadHandler.AutoLoadList> cph = new DefaultAutoLoadHandler();
+			ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph = new DefaultAutoLoadHandler();
 			//			<O, A, I, R> 
 			for (CtField f : ctFields) {
 				if (null != cph.getCheck(f)) {
 					//					newClazz.addField((CtField) cph.doProcessing(classCache, newClazz, f));
-					DefaultAutoLoadHandler.AutoLoadList a = cph.doProcessing(classCache, newClazz, f);
-					imports.add(a.getImports());
-					injections.add(a.getField());
+					//					DefaultAutoLoadHandler.AutoLoadList a = cph.doProcessing(classCache, newClazz, f);
+					//					imports.add(a.getImports());
+					//					injections.add(a.getField());
+					handlerInfos.add(cph.doProcessing(classCache, newClazz, f));
 					level++;
 				}
 			}
@@ -189,10 +191,10 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
 			StringBuffer sb = new StringBuffer("{");
 			sb.append("super($$);");
-			if (injections.size() > 0) {
+			if (handlerInfos.size() > 0) {
 				sb.append("try {");
-				for (String s : injections) {
-					sb.append(s);
+				for (HandlerInfo h : handlerInfos) {
+					sb.append(h.getX());
 				}
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
@@ -211,8 +213,10 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			}
 
 			//Import
-			for (String s : imports)
-				newClazz.getClassPool().importPackage(s);
+			for (HandlerInfo h : handlerInfos) {
+				for (String s : h.getImports())
+					newClazz.getClassPool().importPackage(s);
+			}
 			newClazz.getClassPool().importPackage("java.lang.Exception");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
 			//反编查看
@@ -233,6 +237,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
+				//搜索class
 				try {
 					en.getValue().writeFile("C:/Users/Ben/Desktop");
 				} catch (IOException e) {

@@ -25,7 +25,7 @@ public interface CachePoolFactory {
 
 	public Object putList(Object o, Object... values);
 
-	public Object addNFloop4Map(Object value, Object... key);
+	public Object addNFloop4Map(boolean isConcurrent, Object value, Object... key);
 
 	/***
 	 * 
@@ -35,6 +35,6 @@ public interface CachePoolFactory {
 	 * @return 返回实际楼层
 	 * @throws Exception
 	 */
-	public Integer[] addNFloor(Object Key, Object value, Integer... floor) throws Exception;
+	public Integer[] addNFloor(boolean isConcurrent, Object Key, Object value, Integer... floor) throws Exception;
 
 }

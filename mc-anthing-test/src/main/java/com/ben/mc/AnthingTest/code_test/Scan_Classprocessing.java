@@ -1,19 +1,15 @@
 package com.ben.mc.AnthingTest.code_test;
 
 import java.io.IOException;
-import java.lang.annotation.Inherited;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import javassist.CtClass;
 
-import com.ben.mc.AnthingTest.AutoLoadTestI;
-import com.ben.mc.AnthingTest.AutoLoadTestImpl;
 import com.ben.mc.AnthingTest.IocTest1;
 import com.ben.mc.classprocessing.BeanFactory;
 import com.ben.mc.classprocessing.ClassProcessingFactory;
-import com.ben.mc.classprocessing.DefaultClassProcessing;
 import com.ben.mc.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.scan.Scan;
 
