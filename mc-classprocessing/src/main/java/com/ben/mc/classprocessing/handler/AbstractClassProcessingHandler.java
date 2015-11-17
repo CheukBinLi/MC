@@ -14,5 +14,4 @@ public abstract class AbstractClassProcessingHandler<O, A> implements ClassProce
 		}
 		return null;
 	}
-
 }

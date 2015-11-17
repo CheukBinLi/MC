@@ -24,11 +24,20 @@ import java.lang.annotation.Target;
  * @see 方法拦截
  *
  */
-@Target(ElementType.TYPE)
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface intercept {
+public @interface Intercept {
 
-	public String value() default "";
+	/***
+	 * 实现类
+	 * @return
+	 */
+	public String value();
 
+	/***
+	 *  拦截范围。默认拦截所有方法
+	 * @return
+	 */
+	public String[] method() default "";
 }

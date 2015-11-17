@@ -98,11 +98,37 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 	}
 
 	protected String makeField(CtField o, String implClassName) throws NotFoundException {
-		//		return String.format("%s %s %s=new %s%s();", Modifier.toString(o.getModifiers()), o.getType().getName(), o.getName(), classImpl, ClassProcessingFactory.Impl);
+		//		return String.format("%s %s %s=new %s%s();", Modifier.toSring(o.getModifiers()), o.getType().getName(), o.getName(), classImpl, ClassProcessingFactory.Impl);
 		return String.format(" %s=new %s%s();", o.getName(), implClassName, ClassProcessingFactory.Impl);
 	}
 
 	public Class<AutoLoad> handlerClass() {
 		return AutoLoad.class;
+	}
+
+	@Override
+	public com.ben.mc.classprocessing.handler.ClassProcessingHandler.scope getScope() {
+		return scope.TypeOrField;
+	}
+
+	public static void main(String[] args) {
+
+		int a1 = 8 | 2 | 4;
+		int a2 = 2 | 4 | 10;
+		int a3 = 2 | 4 | 5 | 6;
+		System.out.println(a1);
+		System.out.println(a2);
+		System.out.println(a3);
+		int ax1 = 0x00000001;
+		int ax2 = 0x00000002;
+		int ax3 = 0x00000004;
+
+		int ax4 = 0x00000008;
+		int ax5 = 0x00000010;
+		int ax6 = 0x00000040;
+
+		System.err.println(1 | ax2 | ax4);
+		System.err.println(2 | ax1 | ax5);
+
 	}
 }

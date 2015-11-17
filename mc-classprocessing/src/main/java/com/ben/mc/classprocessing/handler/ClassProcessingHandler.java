@@ -27,7 +27,17 @@ import javassist.CtClass;
  */
 public interface ClassProcessingHandler<O, A, I, R> {
 
+	public static enum scope {
+		Type, Field, Method, TypeOrField, FieldOrMethod, TypeOrMetho, All
+	};
+
 	Class<A> handlerClass();
+
+	/***
+	 * 运行范围
+	 * @return
+	 */
+	scope getScope();
 
 	public A getCheck(I x) throws Throwable;
 
