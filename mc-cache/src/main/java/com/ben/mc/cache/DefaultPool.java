@@ -1,13 +1,13 @@
 package com.ben.mc.cache;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultPool implements Pool<Object> {
 
 	public static final String NORNAL_BEAN = "NORNAL_BEAN";
 
-	private static final Map<Object, Object> CACHE = new HashMap<Object, Object>();
+	private static final Map<Object, Object> CACHE = new ConcurrentHashMap<Object, Object>();
 
 	private static final DefaultPool newInstance = new DefaultPool();
 

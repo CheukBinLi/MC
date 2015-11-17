@@ -2,7 +2,14 @@ package com.ben.mc.classprocessing;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Map;
+
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
 
 /***
  * 
@@ -80,4 +87,57 @@ public class ClassInfo {
 		this.methods = methods;
 	}
 
+	/***
+	 * 方法名加工
+	 * @param m
+	 * @return
+	 */
+	public static final String getMethod(Method m) {
+		String ax = String.format("%s %s %s(%s);", Modifier.toString(m.getModifiers()), m.getReturnType().getName(), m.getName(), getParameterTypes(m.getParameterTypes()));
+		//		System.out.println(ax);
+		return ax;
+	}
+
+	/***
+	 * 方法名加工
+	 * @param m
+	 * @return
+	 */
+	public static final String getMethod(CtMethod m) throws NotFoundException {
+		String ax = String.format("%s %s %s(%s);", Modifier.toString(m.getModifiers()), m.getReturnType().getName(), m.getName(), getParameterTypes(m.getParameterTypes()));
+		//		System.out.println(ax);
+		return ax;
+	}
+
+	protected static final ArrayList<String> getParameterTypes(CtClass... c) {
+		ArrayList<String> a = new ArrayList<String>();
+		for (CtClass b : c)
+			a.add(b.getName());
+		return a;
+	}
+
+	protected static final ArrayList<String> getParameterTypes(Class... c) {
+		ArrayList<String> a = new ArrayList<String>();
+		for (Class b : c)
+			a.add(b.getName());
+		return a;
+	}
+
+	public static void main(String[] args) throws NotFoundException {
+		Class c = DefaultMethodPool.class;
+
+		CtClass ctC = ClassPool.getDefault().get(c.getName());
+
+		Method[] methods = c.getDeclaredMethods();
+
+		CtMethod[] ctMethods = ctC.getDeclaredMethods();
+
+		for (Method m : methods)
+			System.out.println(getMethod(m));
+		for (CtMethod m : ctMethods)
+			System.err.println(getMethod(m));
+
+	}
+	
+	
 }

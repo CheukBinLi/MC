@@ -31,6 +31,7 @@ import com.ben.mc.classprocessing.handler.HandlerInfo;
 import com.ben.mc.util.ExecutorServiceFatory;
 import com.ben.mc.util.ShortNameUtil;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class DefaultClassProcessingFactory implements ClassProcessingFactory<CtClass> {
 
 	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, List<String> xmlAppendList) throws InterruptedException {
@@ -51,7 +52,9 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		countDownLatch.await();
 		//
 		try {
-			doHandler(null, cache);
+			List<ClassProcessingHandler> list = new ArrayList<ClassProcessingHandler>();
+			list.add(new DefaultAutoLoadHandler());
+			doHandler(list, cache);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,13 +74,11 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 	class Worker implements Runnable {
 
 		private CountDownLatch countDownLatch;
-		@SuppressWarnings("rawtypes")
 		private Map<String, Map> cache;
 		private String className;
 		private List<String> xmlAppendList;
 		private boolean falgs;
 
-		@SuppressWarnings("rawtypes")
 		public Worker(CountDownLatch countDownLatch, Map<String, Map> cache, String className) {
 			super();
 			this.countDownLatch = countDownLatch;
@@ -85,7 +86,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			this.className = className;
 		}
 
-		@SuppressWarnings("rawtypes")
 		public Worker(CountDownLatch countDownLatch, Map<String, Map> cache, List<String> xmlAppendList) {
 			super();
 			this.countDownLatch = countDownLatch;
@@ -94,7 +94,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			this.falgs = true;
 		}
 
-		@SuppressWarnings("unchecked")
 		public void run() {
 			try {
 				int count = 1;
@@ -113,12 +112,14 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 					if (name.length() > 0)
 						cache.get(NICK_NAME_CACHE).put(name, clazz.getName());
 					cache.get(REGISTER_CACHE).put(clazz.getName(), clazz);
-					Object x = clazz;
-					System.err.println("xxxxxx:" + x);
-					//					cache.get(SHORT_NAME_CACHE).put(clazz.getName(), ClassProcessingFactory.SHORT_NAME_CACHE, ShortNameUtil.makeShortName(clazz.getName()));
 
 					BeanFactory.addCache(clazz.getName(), ClassProcessingFactory.SHORT_NAME_CACHE, ShortNameUtil.makeShortName(clazz.getName()));
-
+					//搜索class
+					try {
+						BeanFactory.addClassInfo(scanClass(Class.forName(className), true));
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
 				return;
 			} catch (NotFoundException e) {
@@ -132,7 +133,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	protected void doHandler(List<ClassProcessingHandler> handler, final Map<String, Map> classCache) throws Throwable {
 
 		final Map<String, String> autoLoadClass = new ConcurrentHashMap<String, String>();
@@ -161,31 +161,26 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			newClazz.setSuperclass(tempClazz);
 
 			//搜索Feld
-
-			//搜索Method
-
-			//构造加载、引包
-
-			//建立构造
 			CtField[] ctFields = tempClazz.getDeclaredFields();
 			//			CtField newField;
-			ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph = new DefaultAutoLoadHandler();
+			//			ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph = new DefaultAutoLoadHandler();
 			//			<O, A, I, R> 
-			for (CtField f : ctFields) {
-				if (null != cph.getCheck(f)) {
-					//					newClazz.addField((CtField) cph.doProcessing(classCache, newClazz, f));
-					//					DefaultAutoLoadHandler.AutoLoadList a = cph.doProcessing(classCache, newClazz, f);
-					//					imports.add(a.getImports());
-					//					injections.add(a.getField());
-					handlerInfos.add(cph.doProcessing(classCache, newClazz, f));
-					level++;
+			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph : handler)
+				for (CtField f : ctFields) {
+					if (null != cph.getCheck(f)) {
+						handlerInfos.add(cph.doProcessing(classCache, newClazz, f));
+						level++;
+					}
 				}
-			}
 			if (level == 0)
 				A1.put(en.getKey(), newClazz);
 			else
 				A2.put(en.getKey(), newClazz);
-			//构造块
+
+			//搜索Method
+			//********************
+
+			//建立构造、构造加载
 			CtConstructor tempC;
 			CtConstructor[] ctConstructors = tempClazz.getDeclaredConstructors();
 			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
@@ -211,7 +206,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			} catch (DuplicateMemberException e) {
 				//				e.printStackTrace();
 			}
-
 			//Import
 			for (HandlerInfo h : handlerInfos) {
 				for (String s : h.getImports())
@@ -219,12 +213,15 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			}
 			newClazz.getClassPool().importPackage("java.lang.Exception");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
+			newClazz.getClassPool().importPackage("java.lang.reflect.Method");
+			newClazz.getClassPool().importPackage("com.ben.mc.classprocessing.BeanFactory");
+			newClazz.getClassPool().importPackage("com.ben.mc.classprocessing.ClassInfo");
 			//反编查看
-			try {
-				tempClazz.writeFile("C:/Users/Ben/Desktop");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			//			try {
+			//				tempClazz.writeFile("C:/Users/Ben/Desktop");
+			//			} catch (IOException e) {
+			//				e.printStackTrace();
+			//			}
 		}
 		anthingToClass(compileObject);
 	}
@@ -232,22 +229,20 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 	protected void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
 		for (int i = 0, len = compileObject.size(); i < len; i++) {
 			for (Entry<String, CtClass> en : compileObject.get(i).entrySet()) {
-				@SuppressWarnings("rawtypes")
 				final Class c = en.getValue().toClass();
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
 				//搜索class
-
+				//				BeanFactory.addClassInfo(scanClass(c, false ));
+				//反编查看
 				try {
 					en.getValue().writeFile("C:/Users/Ben/Desktop");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-
 	}
 
 	private ClassInfo scanClass(Class c, boolean isConcurrent) {
@@ -258,7 +253,8 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
 			fields = f;
 			methods = m;
-		} else {
+		}
+		else {
 			final Map<String, Field> f = new HashMap<String, Field>();
 			final Map<String, Method> m = new HashMap<String, Method>();
 			fields = f;
@@ -271,23 +267,9 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			fields.put(f.getName(), f);
 		}
 		for (Method m : ms) {
-			m.getParameters()
-			methods.put(m.getName(), m)
+			methods.put(ClassInfo.getMethod(m), m);
 		}
-		ClassInfo ci = new ClassInfo(c.getName(), c, fields, methods);
-
-		return null;
+		ClassInfo ci = new ClassInfo(c.getName() + Impl, c, fields, methods);
+		return ci;
 	}
-	//	static {
-	//		{
-	//			super($$);
-	//			try {
-	//				Field fields = this.getClass().getSuperclass().getDeclaredField("autoLoadTestImpl");
-	//				fields.setAccessible(true);
-	//				fields.set(this, new com.ben.mc.AnthingTest.AutoLoadTestImpl$MC_IMPL());
-	//			} catch (java.lang.Exception e) {
-	//			}
-	//		}
-	//
-	//	}
 }

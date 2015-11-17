@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@SuppressWarnings(value = { "unchecked","rawtypes" })
+@SuppressWarnings(value = { "unchecked", "rawtypes" })
 public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 
 	public abstract Pool<Object> getCache();
 
-	public AbstractCachePoolFactory(boolean isConcurrent) {
+	public AbstractCachePoolFactory() {
 		super();
 	}
 
@@ -155,7 +155,7 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		System.out.println(a.getNFloor("学校分级", A3));
 		System.out.println(a.getNFloor("学校分级", A33));
 		System.out.println(a.getNFloor("学校分级", A4));
-//		Object o = a.get("学校分级");
+		//		Object o = a.get("学校分级");
 		System.out.println(a.get("学校分级"));
 
 		///

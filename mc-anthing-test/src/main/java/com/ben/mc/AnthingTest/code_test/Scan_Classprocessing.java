@@ -38,4 +38,9 @@ public class Scan_Classprocessing {
 		i.aaxx("王小牛0_0");
 
 	}
+
+//	static {
+//		Field field = BeanFactory.getClassInfo("com.ben.mc.AnthingTest.IocTest1$MC_IMPL").setFields().get("autoLoadTestImpl");
+//		field.set(this, new com.ben.mc.AnthingTest.AutoLoadTestImpl$MC_IMPL());
+//	}
 }
