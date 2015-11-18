@@ -18,4 +18,9 @@ public class IocTest1 {
 	public void aaxx(String name) {
 		autoLoadTestImpl.hello(name);
 	}
+
+	@Intercept("aa")
+	public void aaxx2(String name, String sex) {
+		autoLoadTestImpl.hello(name);
+	}
 }

@@ -49,18 +49,20 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 		CtMethod ctMethod = CtNewMethod.copy((CtMethod) additional, newClazz, null);
 
 		//		private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();
-		newClazz.addField(CtField.make("private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();", newClazz));
+		if (null == newClazz.getField("interception"))
+			newClazz.addField(CtField.make("private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();", newClazz));
 
-		//		StringBuffer sb = new StringBuffer("{");
-		//		sb.append("if(interception.Intercept(this,null,$$)){");
-		//		if (ctMethod.getReturnType().getName().equals("void"))
-		//			sb.append("super.").append(ctMethod.getName()).append("($$);");
-		//		else
-		//			sb.append("return super.").append(ctMethod.getName()).append("($$);");
-		//		sb.append("}");
-		//		sb.append("}");
-		//		System.err.println(sb.toString());
-		ctMethod.setBody("{System.err.println(\"asdf\");}");
+		StringBuffer sb = new StringBuffer("{");
+		sb.append("if(this.interception.Intercept(this,null,new Object[1])){");
+		if (ctMethod.getReturnType().getName().equals("void"))
+			sb.append("super.").append(ctMethod.getName()).append("($$);");
+		else
+			sb.append("return super.").append(ctMethod.getName()).append("($$);");
+		sb.append("}");
+		sb.append("}");
+		System.err.println(sb.toString());
+		ctMethod.setBody(sb.toString());
+		//		ctMethod.setBody("{System.err.println(\"asdf\");}");
 		//		ctMethod.setBody("{if(interception.Intercept(this,method,$$){})}");
 		//
 
@@ -75,18 +77,14 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 			Object o = m.getReturnType();
 			//			if(m.getReturnType().getName().equals("void"))		
 		}
+		Object o = new Object[] {};
 	}
 
-//	static {
-//		{
-//			super($$);
-//			try {
-//				java.lang.reflect.Field field = BeanFactory.getClassInfoField("com.ben.mc.AnthingTest.IocTest1$MC_IMPL", "autoLoadTestImpl");
-//				field.setAccessible(true);
-//				field.set(this, new com.ben.mc.AnthingTest.AutoLoadTestImpl$MC_IMPL());
-//			} catch (java.lang.Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	//	static {
+	//		{
+	//			if (this.interception.Intercept(this, null, new Object[]{$$})) {
+	//				super.aaxx($$);
+	//			}
+	//		}
+	//	}
 }

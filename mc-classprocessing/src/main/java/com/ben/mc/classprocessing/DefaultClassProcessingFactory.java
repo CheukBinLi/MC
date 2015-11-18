@@ -225,7 +225,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			}
 			//Import
 			for (HandlerInfo h : handlerInfos) {
-				if (null != h)
+				if (null != h.getImports())
 					for (String s : h.getImports()) {
 						newClazz.getClassPool().importPackage(s);
 					}
