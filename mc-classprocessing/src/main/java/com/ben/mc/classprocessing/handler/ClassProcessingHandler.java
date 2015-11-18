@@ -1,6 +1,7 @@
 package com.ben.mc.classprocessing.handler;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,9 +28,9 @@ import javassist.CtClass;
  */
 public interface ClassProcessingHandler<O, A, I, R> {
 
-	public static enum scope {
-		Type, Field, Method, TypeOrField, FieldOrMethod, TypeOrMetho, All
-	};
+	public static final int Type = 0x00000001;
+	public static final int Field = 0x00000002;
+	public static final int Method = 0x00000004;
 
 	Class<A> handlerClass();
 
@@ -37,9 +38,13 @@ public interface ClassProcessingHandler<O, A, I, R> {
 	 * 运行范围
 	 * @return
 	 */
-	scope getScope();
+	//	scope getScope();
 
 	public A getCheck(I x) throws Throwable;
+
+	public A getCheck(I x, int type) throws Throwable;
+
+	public Set<Integer> thisType();
 
 	/***
 	 * 

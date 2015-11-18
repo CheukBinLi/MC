@@ -1,8 +1,11 @@
 package com.ben.mc.classprocessing.handler;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javassist.CtClass;
 import javassist.CtField;
@@ -33,6 +36,11 @@ import com.ben.mc.util.ShortNameUtil;
  *
  */
 public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad> {
+
+	@Override
+	public Set<Integer> thisType() {
+		return new HashSet<Integer>(Arrays.asList(Field));
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional) throws Throwable {
@@ -106,19 +114,19 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		return AutoLoad.class;
 	}
 
-	@Override
-	public com.ben.mc.classprocessing.handler.ClassProcessingHandler.scope getScope() {
-		return scope.TypeOrField;
-	}
+	//	@Override
+	//	public com.ben.mc.classprocessing.handler.ClassProcessingHandler.scope getScope() {
+	//		return scope.TypeOrField;
+	//	}
 
 	public static void main(String[] args) {
 
-		int a1 = 8 | 2 | 4;
-		int a2 = 2 | 4 | 10;
-		int a3 = 2 | 4 | 5 | 6;
-		System.out.println(a1);
-		System.out.println(a2);
-		System.out.println(a3);
+		//		int a1 = 8 | 2 | 4;
+		//		int a2 = 2 | 4 | 10;
+		//		int a3 = 2 | 4 | 5 | 6;
+		//		System.out.println(a1);
+		//		System.out.println(a2);
+		//		System.out.println(a3);
 		int ax1 = 0x00000001;
 		int ax2 = 0x00000002;
 		int ax3 = 0x00000004;
@@ -127,8 +135,10 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		int ax5 = 0x00000010;
 		int ax6 = 0x00000040;
 
-		System.err.println(1 | ax2 | ax4);
-		System.err.println(2 | ax1 | ax5);
+		System.err.println(ax4 + ax6);
+		System.err.println(ax4 + ax5);
+		System.err.println(ax4 + ax3);
 
 	}
+
 }
