@@ -56,6 +56,6 @@ public interface ClassProcessingHandler<O, A, I, R> {
 	 * @param additional 附加对像 ctfield/ctmethod...
 	 * @return 装拼完成的对象
 	 */
-	public R doProcessing(Map<String, Map> cache, O t, I additional) throws Throwable;
+	public R doProcessing(Map<String, Map> cache, O newClazz, I additional) throws Throwable;
 
 }

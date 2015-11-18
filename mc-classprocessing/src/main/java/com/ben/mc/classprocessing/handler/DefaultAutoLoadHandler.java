@@ -37,7 +37,6 @@ import com.ben.mc.util.ShortNameUtil;
  */
 public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad> {
 
-	@Override
 	public Set<Integer> thisType() {
 		return new HashSet<Integer>(Arrays.asList(Field));
 	}

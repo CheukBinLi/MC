@@ -19,6 +19,7 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMember;
+import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
@@ -27,6 +28,7 @@ import com.ben.mc.annotation.AutoLoad;
 import com.ben.mc.annotation.Register;
 import com.ben.mc.classprocessing.handler.ClassProcessingHandler;
 import com.ben.mc.classprocessing.handler.DefaultAutoLoadHandler;
+import com.ben.mc.classprocessing.handler.DefaultInterceptHandler;
 import com.ben.mc.classprocessing.handler.HandlerInfo;
 import com.ben.mc.util.ExecutorServiceFatory;
 import com.ben.mc.util.ShortNameUtil;
@@ -54,6 +56,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		try {
 			List<ClassProcessingHandler> list = new ArrayList<ClassProcessingHandler>();
 			list.add(new DefaultAutoLoadHandler());
+			list.add(new DefaultInterceptHandler());
 			doHandler(list, cache);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -162,23 +165,35 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 
 			//搜索Feld
 			CtField[] ctFields = tempClazz.getDeclaredFields();
+			//搜索Method
+			//********************
+			CtMethod[] ctMethods = tempClazz.getDeclaredMethods();
 			//			CtField newField;
 			//			ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph = new DefaultAutoLoadHandler();
 			//			<O, A, I, R> 
-			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph : handler)
-				for (CtField f : ctFields) {
-					if (null != cph.getCheck(f)) {
+			HandlerInfo handlerInfo;
+			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph : handler) {
+				for (CtField f : ctFields) {//Field
+					if (null != cph.getCheck(f, ClassProcessingHandler.Field)) {
 						handlerInfos.add(cph.doProcessing(classCache, newClazz, f));
 						level++;
 					}
 				}
+				for (CtMethod m : ctMethods) {//Method
+					if (null != cph.getCheck(m, ClassProcessingHandler.Method)) {
+						//						handlerInfos.add();
+						handlerInfo = cph.doProcessing(classCache, newClazz, m);
+						handlerInfos.add(handlerInfo);
+						newClazz = handlerInfo.getNewClazz();
+						newClazz.addMethod((CtMethod) handlerInfo.getAdditional());
+						level++;
+					}
+				}
+			}
 			if (level == 0)
 				A1.put(en.getKey(), newClazz);
 			else
 				A2.put(en.getKey(), newClazz);
-
-			//搜索Method
-			//********************
 
 			//建立构造、构造加载
 			CtConstructor tempC;
@@ -189,11 +204,13 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			if (handlerInfos.size() > 0) {
 				sb.append("try {");
 				for (HandlerInfo h : handlerInfos) {
-					sb.append(h.getX());
+					if (null != h.getX())
+						sb.append(h.getX());
 				}
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
+			System.err.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
 			newClazz.addConstructor(defauleConstructor);
@@ -208,8 +225,10 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			}
 			//Import
 			for (HandlerInfo h : handlerInfos) {
-				for (String s : h.getImports())
-					newClazz.getClassPool().importPackage(s);
+				if (null != h)
+					for (String s : h.getImports()) {
+						newClazz.getClassPool().importPackage(s);
+					}
 			}
 			newClazz.getClassPool().importPackage("java.lang.Exception");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
@@ -253,8 +272,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
 			fields = f;
 			methods = m;
-		}
-		else {
+		} else {
 			final Map<String, Field> f = new HashMap<String, Field>();
 			final Map<String, Method> m = new HashMap<String, Method>();
 			fields = f;

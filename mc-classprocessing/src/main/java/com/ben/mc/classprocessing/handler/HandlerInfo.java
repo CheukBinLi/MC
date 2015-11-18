@@ -2,19 +2,19 @@ package com.ben.mc.classprocessing.handler;
 
 /***
  * 
- * Copyright 2015    ZHOU.BING.LI Individual All
- *  
+ * Copyright 2015 ZHOU.BING.LI Individual All
+ * 
  * ALL RIGHT RESERVED
- *  
+ * 
  * CREATE ON 2015年11月16日 下午4:30:52
- *  
+ * 
  * EMAIL:20796698@QQ.COM
- *  
+ * 
  * GITHUB:https://github.com/fdisk123
  * 
  * @author ZHUO.BIN.LI
  * 
- * @see  构造加载、注入/初始信息
+ * @see 构造加载、注入/初始信息
  *
  */
 public class HandlerInfo {
@@ -22,6 +22,8 @@ public class HandlerInfo {
 	private String x;
 
 	private String[] imports;
+
+	private Object newClazz;
 
 	private Object additional;
 
@@ -41,19 +43,28 @@ public class HandlerInfo {
 		this.imports = imports;
 	}
 
-	public Object getAdditional() {
-		return additional;
+	public <T> T getAdditional() {
+		return (T) additional;
 	}
 
 	public void setAdditional(Object additional) {
 		this.additional = additional;
 	}
 
-	public HandlerInfo(String x, Object additional, String... imports) {
+	public <T> T getNewClazz() {
+		return (T) newClazz;
+	}
+
+	public void setNewClazz(Object newClazz) {
+		this.newClazz = newClazz;
+	}
+
+	public HandlerInfo(String x, Object newClazz, Object additional, String... imports) {
 		super();
 		this.x = x;
 		this.imports = imports;
 		this.additional = additional;
+		this.newClazz = newClazz;
 	}
 
 	public HandlerInfo(String x, String... imports) {
@@ -64,7 +75,6 @@ public class HandlerInfo {
 
 	public HandlerInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -5,22 +5,26 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMember;
 import javassist.CtMethod;
+import javassist.CtNewMethod;
+import javassist.NotFoundException;
 
 import com.ben.mc.annotation.Intercept;
 
 /***
  * 
- * Copyright 2015    ZHOU.BING.LI Individual All
- *  
+ * Copyright 2015 ZHOU.BING.LI Individual All
+ * 
  * ALL RIGHT RESERVED
- *  
+ * 
  * CREATE ON 2015年11月17日 下午2:37:08
- *  
+ * 
  * EMAIL:20796698@QQ.COM
- *  
+ * 
  * GITHUB:https://github.com/fdisk123
  * 
  * @author ZHUO.BIN.LI
@@ -31,28 +35,58 @@ import com.ben.mc.annotation.Intercept;
 @SuppressWarnings("rawtypes")
 public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtClass, Intercept> {
 
-	@Override
 	public Set<Integer> thisType() {
 		return new HashSet<Integer>(Arrays.asList(Type, Method));
 	}
 
-	@Override
 	public Class<Intercept> handlerClass() {
 		return Intercept.class;
 	}
 
-	@Override
-	public HandlerInfo doProcessing(Map<String, Map> cache, CtClass t, CtMember additional) throws Throwable {
+	public HandlerInfo doProcessing(Map<String, Map> cache, CtClass newClazz, CtMember additional) throws Throwable {
 		System.err.println(this.getClass().getName() + ":" + additional.getName());
 		//		HandlerInfo handlerInfo=new HandlerInfo(x, additional, imports);
-		CtMethod ctMethod = (CtMethod) additional;
+		CtMethod ctMethod = CtNewMethod.copy((CtMethod) additional, newClazz, null);
 
-		com.ben.mc.classprocessing.handler.Interception interception = null;
+		//		private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();
+		newClazz.addField(CtField.make("private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();", newClazz));
 
-		ctMethod.setBody("");
+		//		StringBuffer sb = new StringBuffer("{");
+		//		sb.append("if(interception.Intercept(this,null,$$)){");
+		//		if (ctMethod.getReturnType().getName().equals("void"))
+		//			sb.append("super.").append(ctMethod.getName()).append("($$);");
+		//		else
+		//			sb.append("return super.").append(ctMethod.getName()).append("($$);");
+		//		sb.append("}");
+		//		sb.append("}");
+		//		System.err.println(sb.toString());
+		ctMethod.setBody("{System.err.println(\"asdf\");}");
+		//		ctMethod.setBody("{if(interception.Intercept(this,method,$$){})}");
 		//
 
-		return null;
+		return new HandlerInfo(null, newClazz, ctMethod, null);
 	}
 
+	public static void main(String[] args) throws NotFoundException {
+		ClassPool pool = ClassPool.getDefault();
+		CtClass c = pool.get("com.ben.mc.classprocessing.handler.DefaultInterception");
+		CtMethod[] ms = c.getDeclaredMethods();
+		for (CtMethod m : ms) {
+			Object o = m.getReturnType();
+			//			if(m.getReturnType().getName().equals("void"))		
+		}
+	}
+
+//	static {
+//		{
+//			super($$);
+//			try {
+//				java.lang.reflect.Field field = BeanFactory.getClassInfoField("com.ben.mc.AnthingTest.IocTest1$MC_IMPL", "autoLoadTestImpl");
+//				field.setAccessible(true);
+//				field.set(this, new com.ben.mc.AnthingTest.AutoLoadTestImpl$MC_IMPL());
+//			} catch (java.lang.Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }
