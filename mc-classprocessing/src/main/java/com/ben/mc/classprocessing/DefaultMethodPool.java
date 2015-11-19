@@ -52,4 +52,12 @@ public class DefaultMethodPool implements MethodPool {
 
 	}
 
+//	public Boolean[] a() {
+//		return null;
+//	}
+//
+//	public Boolean a1() {
+//		return null;
+//	}
+
 }

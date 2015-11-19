@@ -10,6 +10,7 @@ import java.util.Set;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMember;
+import javassist.CtMethod;
 import javassist.NotFoundException;
 
 import com.ben.mc.annotation.AutoLoad;
@@ -43,6 +44,8 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional) throws Throwable {
+		if (!(additional instanceof CtField))
+			return null;
 		CtField o = (CtField) additional;
 		Iterator<Entry<String, CtClass>> autoIt = cache.get(ClassProcessingFactory.REGISTER_CACHE).entrySet().iterator();
 		Entry<String, CtClass> tempEn;
@@ -57,7 +60,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				//				return new AutoLoadList(makeField(o, nick), nick);
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-				sb.append("field.setAccessible(true);");
+				//				sb.append("field.setAccessible(true);");
 				sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
 				return new HandlerInfo(sb.toString(), nick);
 
@@ -69,7 +72,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		if (nick != null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-			sb.append("field.setAccessible(true);");
+			//			sb.append("field.setAccessible(true);");
 			sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
 			return new HandlerInfo(sb.toString(), nick);
 		}
@@ -96,7 +99,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
 				//				sb.append("java.lang.reflect.Field field = (java.lang.reflect.Field)BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\")").append(".getFields().get(\"").append(o.getName()).append("\");");
-				sb.append("field.setAccessible(true);");
+				//				sb.append("field.setAccessible(true);");
 				sb.append("field.set(this, new ").append(tempEn.getValue().getName() + DefaultClassProcessingFactory.Impl).append("());");
 				return new HandlerInfo(sb.toString(), tempEn.getValue().getName());
 			}

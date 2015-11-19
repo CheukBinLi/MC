@@ -19,12 +19,33 @@ package com.ben.mc.classprocessing.handler;
  */
 public class HandlerInfo {
 
+	/***
+	 * 附加到构造
+	 */
 	private String x;
 
+	/***
+	 * 引包
+	 */
 	private String[] imports;
 
+	//	/***
+	//	 * 附加字段
+	//	 */
+	//	private Object[] additionalField;
+	//	/***
+	//	 * 附加方法
+	//	 */
+	//	private Object[] additionalMethod;
+
+	/***
+	 * 新类
+	 */
 	private Object newClazz;
 
+	/***
+	 * 附加对象(加工返回)
+	 */
 	private Object additional;
 
 	public String getX() {

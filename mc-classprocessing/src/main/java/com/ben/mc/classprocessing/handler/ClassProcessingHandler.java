@@ -26,7 +26,7 @@ import javassist.CtClass;
  * @param <O> 传入要解释的ctclazz
  * @param <A> annotation对象
  */
-public interface ClassProcessingHandler<O, A, I, R> {
+public interface ClassProcessingHandler<O, A, I, II, R> {
 
 	public static final int Type = 0x00000001;
 	public static final int Field = 0x00000002;
@@ -43,6 +43,10 @@ public interface ClassProcessingHandler<O, A, I, R> {
 	public A getCheck(I x) throws Throwable;
 
 	public A getCheck(I x, int type) throws Throwable;
+
+	public A getCheckII(II x) throws Throwable;
+
+	public A getCheckII(II x, int type) throws Throwable;
 
 	public Set<Integer> thisType();
 

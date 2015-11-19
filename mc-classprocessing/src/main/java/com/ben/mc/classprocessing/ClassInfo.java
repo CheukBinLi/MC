@@ -123,6 +123,49 @@ public class ClassInfo {
 		return a;
 	}
 
+	/***
+	 * 返回类型
+	 * @param c
+	 * @return
+	 */
+	public static final String getReturn(CtClass c) {
+		if (c.isArray())
+			return "null";
+		else if (c.getSimpleName().equalsIgnoreCase("boolean"))
+			return "false";
+		else if (c.getSimpleName().equals("String"))
+			return "null";
+		else if (c.getSimpleName().equals("Integer"))
+			return "null";
+		else if (c.getSimpleName().equals("int"))
+			return "-1";
+		else if (c.getSimpleName().equals("byte"))
+			return "-1";
+		else if (c.getSimpleName().equals("Byte"))
+			return "null";
+		else if (c.getSimpleName().equals("char"))
+			return "0";
+		else if (c.getSimpleName().equals("Char"))
+			return "null";
+		else if (c.getSimpleName().equals("Double"))
+			return "null";
+		else if (c.getSimpleName().equals("double"))
+			return "-1D";
+		else if (c.getSimpleName().equals("long"))
+			return "-1L";
+		else if (c.getSimpleName().equalsIgnoreCase("Long"))
+			return "null";
+		else if (c.getSimpleName().equals("short"))
+			return "-1";
+		else if (c.getSimpleName().equals("Short"))
+			return "null";
+		else if (c.getSimpleName().equals("Float"))
+			return "null";
+		else if (c.getSimpleName().equals("float"))
+			return "-1F";
+		return "";
+	}
+
 	public static void main(String[] args) throws NotFoundException {
 		Class c = DefaultMethodPool.class;
 
@@ -134,10 +177,10 @@ public class ClassInfo {
 
 		for (Method m : methods)
 			System.out.println(getMethod(m));
-		for (CtMethod m : ctMethods)
-			System.err.println(getMethod(m));
-
+		for (CtMethod m : ctMethods) {
+			System.err.println(getMethod(m) + " return " + m.getReturnType().getSimpleName());
+			System.out.println(getReturn(m.getReturnType()));
+		}
 	}
-	
-	
+
 }

@@ -12,8 +12,10 @@ import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.DuplicateMemberException;
 
 import com.ben.mc.annotation.Intercept;
+import com.ben.mc.classprocessing.ClassInfo;
 
 /***
  * 
@@ -44,28 +46,40 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 	}
 
 	public HandlerInfo doProcessing(Map<String, Map> cache, CtClass newClazz, CtMember additional) throws Throwable {
-		System.err.println(this.getClass().getName() + ":" + additional.getName());
-		//		HandlerInfo handlerInfo=new HandlerInfo(x, additional, imports);
+		if (!(additional instanceof CtMethod))
+			return null;
 		CtMethod ctMethod = CtNewMethod.copy((CtMethod) additional, newClazz, null);
-
+		boolean isReturn = !ctMethod.getReturnType().getName().equals("void");
 		//		private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();
-		if (null == newClazz.getField("interception"))
-			newClazz.addField(CtField.make("private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();", newClazz));
+		String imp = String.format("private com.ben.mc.classprocessing.handler.Interception interception = new %s();", this.a.value());
+		try {
+			if (null == newClazz.getDeclaredField("interception"))
+				newClazz.addField(CtField.make(imp, newClazz));
+		} catch (NotFoundException e) {
+			newClazz.addField(CtField.make(imp, newClazz));
+		}
 
 		StringBuffer sb = new StringBuffer("{");
-		sb.append("if(this.interception.Intercept(this,null,new Object[1])){");
-		if (ctMethod.getReturnType().getName().equals("void"))
-			sb.append("super.").append(ctMethod.getName()).append("($$);");
+		if (isReturn)
+			sb.append("Object o;");
+		sb.append("this.interception.before();");
+		sb.append("if(this.interception.Intercept(this,");
+		sb.append("BeanFactory.getClassInfoMethod(\"").append(newClazz.getName()).append("\",\"").append(ClassInfo.getMethod(ctMethod)).append("\")");
+		sb.append(",$args)){");
+		if (isReturn)
+			sb.append("o= super.").append(ctMethod.getName()).append("($$);");
 		else
-			sb.append("return super.").append(ctMethod.getName()).append("($$);");
+			sb.append("super.").append(ctMethod.getName()).append("($$);");
 		sb.append("}");
+		if (isReturn)
+			sb.append("else { o=" + ClassInfo.getReturn(ctMethod.getReturnType()) + ";}");
+		sb.append("this.interception.after();");
+		if (isReturn)
+			sb.append("return o;");
 		sb.append("}");
-		System.err.println(sb.toString());
+		//		System.err.println(sb.toString());
 		ctMethod.setBody(sb.toString());
-		//		ctMethod.setBody("{System.err.println(\"asdf\");}");
-		//		ctMethod.setBody("{if(interception.Intercept(this,method,$$){})}");
-		//
-
+		newClazz.addMethod(ctMethod);
 		return new HandlerInfo(null, newClazz, ctMethod, null);
 	}
 
@@ -79,12 +93,4 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 		}
 		Object o = new Object[] {};
 	}
-
-	//	static {
-	//		{
-	//			if (this.interception.Intercept(this, null, new Object[]{$$})) {
-	//				super.aaxx($$);
-	//			}
-	//		}
-	//	}
 }

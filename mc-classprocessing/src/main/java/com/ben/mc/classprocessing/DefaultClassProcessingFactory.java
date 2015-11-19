@@ -145,6 +145,8 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 
 		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
 		List<HandlerInfo> handlerInfos = new ArrayList<HandlerInfo>();
+		//		Set<CtField> additionalField = new HashSet<CtField>();//附加字段
+		//		Set<CtMethod> additionalMethod = new HashSet<CtMethod>();//附加方法
 
 		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
 		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
@@ -168,24 +170,25 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			//搜索Method
 			//********************
 			CtMethod[] ctMethods = tempClazz.getDeclaredMethods();
-			//			CtField newField;
-			//			ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph = new DefaultAutoLoadHandler();
-			//			<O, A, I, R> 
 			HandlerInfo handlerInfo;
-			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, HandlerInfo> cph : handler) {
+			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, CtClass, HandlerInfo> cph : handler) {
 				for (CtField f : ctFields) {//Field
-					if (null != cph.getCheck(f, ClassProcessingHandler.Field)) {
-						handlerInfos.add(cph.doProcessing(classCache, newClazz, f));
+					if (null != cph.getCheck(f, ClassProcessingHandler.Field) || null != cph.getCheckII(tempClazz, ClassProcessingHandler.Type)) {
+						handlerInfo = cph.doProcessing(classCache, newClazz, f);
+						if (null == handlerInfo)
+							continue;
+						handlerInfos.add(handlerInfo);
 						level++;
 					}
 				}
 				for (CtMethod m : ctMethods) {//Method
-					if (null != cph.getCheck(m, ClassProcessingHandler.Method)) {
+					if (null != cph.getCheck(m, ClassProcessingHandler.Method) || null != cph.getCheckII(tempClazz, ClassProcessingHandler.Type)) {
 						//						handlerInfos.add();
 						handlerInfo = cph.doProcessing(classCache, newClazz, m);
+						if (null == handlerInfo)
+							continue;
 						handlerInfos.add(handlerInfo);
 						newClazz = handlerInfo.getNewClazz();
-						newClazz.addMethod((CtMethod) handlerInfo.getAdditional());
 						level++;
 					}
 				}
@@ -210,7 +213,6 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
-			System.err.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
 			newClazz.addConstructor(defauleConstructor);
@@ -230,6 +232,14 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 						newClazz.getClassPool().importPackage(s);
 					}
 			}
+			//Additional 附加对旬
+			//			Iterator<CtField> itField = additionalField.iterator();
+			//			while (itField.hasNext())
+			//				newClazz.addField(itField.next());
+			//			Iterator<CtMethod> itMethod = additionalMethod.iterator();
+			//			while (itMethod.hasNext())
+			//				newClazz.addMethod(itMethod.next());
+
 			newClazz.getClassPool().importPackage("java.lang.Exception");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Method");
@@ -272,7 +282,8 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
 			fields = f;
 			methods = m;
-		} else {
+		}
+		else {
 			final Map<String, Field> f = new HashMap<String, Field>();
 			final Map<String, Method> m = new HashMap<String, Method>();
 			fields = f;
