@@ -22,7 +22,6 @@ public abstract class AbstractClassProcessingHandler<O, A> implements ClassProce
 		return null;
 	}
 
-	@Override
 	public A getCheckII(CtClass x) throws Throwable {
 		Object o = x.getAnnotation(handlerClass());
 		if (null != o) {
@@ -32,7 +31,6 @@ public abstract class AbstractClassProcessingHandler<O, A> implements ClassProce
 		return null;
 	}
 
-	@Override
 	public A getCheckII(CtClass x, int type) throws Throwable {
 		if (this.thisType().contains(type))
 			return getCheckII(x);

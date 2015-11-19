@@ -1,1 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE personlist [  
+<!ELEMENT ScanToPackage  (#PCDATA)>
+<!ELEMENT BeanList (Bean+)>  
+<!ELEMENT Bean (name,class,reference)>  
+<!ELEMENT name (#PCDATA)>  
+<!ELEMENT class (#PCDATA)>
+<!ELEMENT reference (#PCDATA)>
+]> 
