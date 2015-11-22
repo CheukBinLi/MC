@@ -1,2 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE MC SYSTEM "file:///F:/Sync/JavaProject/MC/mc-util/src/main/java/Mc.dtd">
+<!DOCTYPE context  SYSTEM "Mc.dtd">
+<context></context>

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE personlist [  
-<!ELEMENT ScanToPackage  (#PCDATA)>
-<!ELEMENT BeanList (Bean+)>  
-<!ELEMENT Bean (name,class,reference)>  
-<!ELEMENT name (#PCDATA)>  
-<!ELEMENT class (#PCDATA)>
-<!ELEMENT reference (#PCDATA)>
-]> 
+<!--<!ELEMENT human (kind)>-->
+<!--<!ELEMENT kind (area+)>-->
+<!--<!ELEMENT area (name,spid)>-->
+<!--<!ELEMENT name (#PCDATA)>-->
+<!--<!ELEMENT spid (#PCDATA)>-->
+
+<!--关键属性-->
+<!--<!ATTLIST name oo CDATA #REQUIRED>-->
+<!--<!ATTLIST name oo CDATA #IMPLIED>-->
+
+<!--<!ELEMENT Context (Bean) #IMPLIED>-->
+<!--<!ELEMENT Bean (#PCDATA) #IMPLIED>-->
+<!ELEMENT context (bean) #IMPLIED>
+<!ELEMENT bean (#PCDATA)>

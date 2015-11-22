@@ -34,9 +34,9 @@ import com.ben.mc.util.ExecutorServiceFatory;
 import com.ben.mc.util.ShortNameUtil;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public abstract class DefaultClassProcessingFactory implements ClassProcessingFactory<CtClass> {
+public abstract class DefaultXmlClassProcessingFactory implements ClassProcessingFactory<CtClass> {
 
-	public Map<String, CtClass> getCompleteClass(Set<String> clazzs,Object config) throws InterruptedException {
+	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, Object config) throws InterruptedException {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
 		final ConcurrentHashMap<String, String> nick = new ConcurrentHashMap<String, String>();
 		final ConcurrentHashMap<String, String> shortName = new ConcurrentHashMap<String, String>();

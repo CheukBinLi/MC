@@ -8,7 +8,7 @@ import com.ben.mc.cache.DefaultCachePoolFactory;
 
 public class BeanFactory {
 
-	private static CachePoolFactory cachePoolFactory = DefaultCachePoolFactory.newInstance();
+	private static final CachePoolFactory cachePoolFactory = new DefaultCachePoolFactory();
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public static <T> T getBean(String name) throws InstantiationException, IllegalAccessException {
@@ -55,7 +55,9 @@ public class BeanFactory {
 
 	/***
 	 * sortName find fullName
-	 * @param name sortName
+	 * 
+	 * @param name
+	 *            sortName
 	 * @return
 	 */
 	public static String getFullName(String shortName) {

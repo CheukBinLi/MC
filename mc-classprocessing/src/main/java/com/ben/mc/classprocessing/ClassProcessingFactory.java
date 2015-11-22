@@ -1,6 +1,5 @@
 package com.ben.mc.classprocessing;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +18,6 @@ public interface ClassProcessingFactory<C> {
 	public static final String SHORT_NAME_CACHE = "SHORT_NAME_CACHE";
 	public static final String CLASS_INFO_CACHE = "$CLASS_INFO_CACHE";
 
-	Map<String, C> getCompleteClass(Set<String> clazzs, List<String> xmlAppendList) throws Throwable;
+	Map<String, C> getCompleteClass(Set<String> clazzs, Object config) throws Throwable;
 
 }

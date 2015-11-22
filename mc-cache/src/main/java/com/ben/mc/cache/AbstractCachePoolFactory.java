@@ -49,8 +49,7 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 			else
 				temp = new ArrayList<Object>();
 			getCache().put(key, temp);
-		}
-		else
+		} else
 			temp = (List<Object>) obj;
 		obj = null;
 		int size = floor.length;
@@ -83,8 +82,7 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		if (floor[size - 1] < temp.size()) {
 			temp.set(floor[size - 1], value);
 			path.add(floor[size - 1]);
-		}
-		else {
+		} else {
 			temp.add(value);
 			path.add(temp.size() - 1);
 		}
@@ -142,7 +140,7 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		ax.add(99);
 		ax.set(0, 44);
 		System.out.println(ax.get(0));
-		AbstractCachePoolFactory a = DefaultCachePoolFactory.newInstance();
+		AbstractCachePoolFactory a = new DefaultCachePoolFactory();
 		a.putList("小明", "a", 1, 2, 3, 4, 5, 6, 7, "小B");
 		System.out.println(a.get("小明"));
 		Integer[] A1 = a.addNFloor(true, "学校分级", "野鸡小学", 1);

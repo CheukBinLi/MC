@@ -26,7 +26,7 @@ public class Scan_Classprocessing {
 		ClassProcessingFactory<CtClass> classProcessingFactory = new DefaultClassProcessingFactory() {
 		};
 
-		Map<String, CtClass> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"), null);
+		Map<String, CtClass> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"),null);
 
 		for (Entry<String, CtClass> en : result.entrySet())
 			System.out.println(en.getValue().getName());
