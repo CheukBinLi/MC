@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE context  SYSTEM "Mc.dtd">
-<context></context>
+<!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd">
+<Context>
+	<CachePool class="com.ben.mc.cache.DefaultCachePoolFactory" />
+	<Bean name="a1" class="x" />
+	<Bean name="a2" class="x" />
+	<Bean name="a3" class="x" />
+	<Bean name="a4" class="x" />
+	<Bean name="a5" class="x" />
+	<Bean name="a6" class="x" />
+	<Intercept methods="all" name="i" ref="r" class="c" />
+</Context>

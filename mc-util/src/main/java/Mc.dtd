@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<!ELEMENT human (kind)>-->
-<!--<!ELEMENT kind (area+)>-->
-<!--<!ELEMENT area (name,spid)>-->
-<!--<!ELEMENT name (#PCDATA)>-->
-<!--<!ELEMENT spid (#PCDATA)>-->
+<!ELEMENT Context (CachePool,Bean*,Intercept*)>
+<!ELEMENT CachePool EMPTY>
+<!ELEMENT Bean EMPTY>
+<!ELEMENT Intercept EMPTY>
 
-<!--关键属性-->
-<!--<!ATTLIST name oo CDATA #REQUIRED>-->
-<!--<!ATTLIST name oo CDATA #IMPLIED>-->
+<!--CachePool-->
+<!ATTLIST CachePool class (com.ben.mc.cache.DefaultCachePoolFactory) #REQUIRED>
+<!ATTLIST CachePool signleNewInstanceMethod (newInstance) #IMPLIED>
 
-<!--<!ELEMENT Context (Bean) #IMPLIED>-->
-<!--<!ELEMENT Bean (#PCDATA) #IMPLIED>-->
-<!ELEMENT context (bean) #IMPLIED>
-<!ELEMENT bean (#PCDATA)>
+<!--Intercept-->
+<!ATTLIST Intercept name CDATA #REQUIRED>
+<!ATTLIST Intercept class CDATA #REQUIRED>
+<!ATTLIST Intercept ref CDATA #REQUIRED>
+<!ATTLIST Intercept methods (all) #REQUIRED>
+
+<!--Bean-->
+<!ATTLIST Bean name CDATA #REQUIRED>
+<!ATTLIST Bean class CDATA #REQUIRED>
+<!ATTLIST Bean ref CDATA #IMPLIED>
