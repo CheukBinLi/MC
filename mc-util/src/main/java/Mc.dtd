@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT Context (CachePool,Bean*,Intercept*)>
+<!ELEMENT Context (CachePool,Bean*,Intercept*,ScanToPack*)>
 <!ELEMENT CachePool EMPTY>
 <!ELEMENT Bean EMPTY>
 <!ELEMENT Intercept EMPTY>
+<!ELEMENT ScanToPack EMPTY>
 
 <!--CachePool-->
 <!ATTLIST CachePool class (com.ben.mc.cache.DefaultCachePoolFactory) #REQUIRED>
@@ -18,3 +19,6 @@
 <!ATTLIST Bean name CDATA #REQUIRED>
 <!ATTLIST Bean class CDATA #REQUIRED>
 <!ATTLIST Bean ref CDATA #IMPLIED>
+
+<!--ScanToPack-->
+<!ATTLIST ScanToPack values CDATA #REQUIRED>
