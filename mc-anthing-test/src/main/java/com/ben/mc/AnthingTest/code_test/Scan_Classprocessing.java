@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-import javassist.CtClass;
-
 import com.ben.mc.AnthingTest.IocTest1;
-import com.ben.mc.classprocessing.BeanFactory;
-import com.ben.mc.classprocessing.ClassProcessingFactory;
-import com.ben.mc.classprocessing.DefaultClassProcessingFactory;
-import com.ben.mc.scan.Scan;
+import com.ben.mc.bean.application.BeanFactory;
+import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
+import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
+import com.ben.mc.bean.scan.Scan;
+
+import javassist.CtClass;
 
 public class Scan_Classprocessing {
 
