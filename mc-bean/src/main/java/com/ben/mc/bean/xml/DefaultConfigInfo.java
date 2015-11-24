@@ -20,8 +20,13 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 		return XmlType_Intercept.equals(tag);
 	}
 
+	public boolean isScanToPack(String tag) {
+		return XmlType_ScanToPack.equals(tag);
+	}
+
 	private static final long serialVersionUID = 1L;
 	private CachePool cachePool;
+	private String scanToPack;
 	private Map<String, Bean> beans = new HashMap<String, DefaultConfigInfo.Bean>();
 	private Map<String, Intercept> intercepts = new HashMap<String, DefaultConfigInfo.Intercept>();
 
@@ -80,6 +85,7 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 	public static class Bean extends XmlFill<Bean> {
 		private String name;
 		private String className;
+		private String type;
 		private String ref;
 
 		@Override
@@ -87,6 +93,7 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 			this.name = a.getValue(XmlType_Name);
 			this.className = a.getValue(XmlType_Class);
 			this.ref = a.getValue(XmlType_Ref);
+			this.type = a.getValue(XmlType_Type);
 			return this;
 		}
 
@@ -112,6 +119,14 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 
 		public void setRef(String ref) {
 			this.ref = ref;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
 		}
 	}
 
@@ -162,6 +177,15 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 			this.methods = methods;
 		}
 
+	}
+
+	public String getScanToPack() {
+		return scanToPack;
+	}
+
+	public DefaultConfigInfo setScanToPack(String scanToPack) {
+		this.scanToPack = scanToPack;
+		return this;
 	}
 
 }

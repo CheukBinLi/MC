@@ -17,6 +17,7 @@ public interface ClassProcessingFactory<C> {
 	public static final String NICK_NAME_CACHE = "NICK_NAME_CACHE";
 	public static final String SHORT_NAME_CACHE = "SHORT_NAME_CACHE";
 	public static final String CLASS_INFO_CACHE = "$CLASS_INFO_CACHE";
+	public static final String XML_CONFIG_CACHE = "$XML_CONFIG_CACHE";
 
 	Map<String, C> getCompleteClass(Set<String> clazzs, Object config) throws Throwable;
 

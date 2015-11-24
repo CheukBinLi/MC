@@ -1,8 +1,5 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,9 +32,9 @@ import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public abstract class DefaultClassProcessingFactory implements ClassProcessingFactory<CtClass> {
+public abstract class DefaultClassProcessingFactory extends AbstractClassProcessingFactory<CtClass> {
 
-	public Map<String, CtClass> getCompleteClass(Set<String> clazzs,Object config) throws InterruptedException {
+	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, Object config) throws InterruptedException {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
 		final ConcurrentHashMap<String, String> nick = new ConcurrentHashMap<String, String>();
 		final ConcurrentHashMap<String, String> shortName = new ConcurrentHashMap<String, String>();
@@ -173,7 +170,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 			for (ClassProcessingHandler<CtClass, AutoLoad, CtMember, CtClass, HandlerInfo> cph : handler) {
 				for (CtField f : ctFields) {//Field
 					if (null != cph.getCheck(f, ClassProcessingHandler.Field) || null != cph.getCheckII(tempClazz, ClassProcessingHandler.Type)) {
-						handlerInfo = cph.doProcessing(classCache, newClazz, f);
+						handlerInfo = cph.doProcessing(classCache, newClazz, f, null);
 						if (null == handlerInfo)
 							continue;
 						handlerInfos.add(handlerInfo);
@@ -183,7 +180,7 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 				for (CtMethod m : ctMethods) {//Method
 					if (null != cph.getCheck(m, ClassProcessingHandler.Method) || null != cph.getCheckII(tempClazz, ClassProcessingHandler.Type)) {
 						//						handlerInfos.add();
-						handlerInfo = cph.doProcessing(classCache, newClazz, m);
+						handlerInfo = cph.doProcessing(classCache, newClazz, m, null);
 						if (null == handlerInfo)
 							continue;
 						handlerInfos.add(handlerInfo);
@@ -254,49 +251,4 @@ public abstract class DefaultClassProcessingFactory implements ClassProcessingFa
 		anthingToClass(compileObject);
 	}
 
-	protected void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
-		for (int i = 0, len = compileObject.size(); i < len; i++) {
-			for (Entry<String, CtClass> en : compileObject.get(i).entrySet()) {
-				final Class c = en.getValue().toClass();
-				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
-				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
-				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
-				//搜索class
-				//				BeanFactory.addClassInfo(scanClass(c, false ));
-				//反编查看
-				try {
-					en.getValue().writeFile("C:/Users/Ben/Desktop");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private ClassInfo scanClass(Class c, boolean isConcurrent) {
-		Map<String, Field> fields = null;
-		Map<String, Method> methods = null;
-		if (isConcurrent) {
-			final Map<String, Field> f = new ConcurrentHashMap<String, Field>();
-			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
-			fields = f;
-			methods = m;
-		} else {
-			final Map<String, Field> f = new HashMap<String, Field>();
-			final Map<String, Method> m = new HashMap<String, Method>();
-			fields = f;
-			methods = m;
-		}
-		Field[] fs = c.getDeclaredFields();
-		Method[] ms = c.getDeclaredMethods();
-		for (Field f : fs) {
-			f.setAccessible(true);
-			fields.put(f.getName(), f);
-		}
-		for (Method m : ms) {
-			methods.put(ClassInfo.getMethod(m), m);
-		}
-		ClassInfo ci = new ClassInfo(c.getName() + Impl, c, fields, methods);
-		return ci;
-	}
 }

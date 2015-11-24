@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT Context (CachePool,Bean*,Intercept*,ScanToPack*)>
+<!ELEMENT Context (Bean*,Intercept*,ScanToPack*)>
+<!--<!ELEMENT Context (CachePool,Bean*,Intercept*,ScanToPack*)>-->
 <!ELEMENT CachePool EMPTY>
 <!ELEMENT Bean EMPTY>
 <!ELEMENT Intercept EMPTY>
 <!ELEMENT ScanToPack EMPTY>
 
 <!--CachePool-->
-<!ATTLIST CachePool class (com.ben.mc.cache.DefaultCachePoolFactory) #REQUIRED>
-<!ATTLIST CachePool signleNewInstanceMethod (newInstance) #IMPLIED>
+<!--<!ATTLIST CachePool class (com.ben.mc.cache.DefaultCachePoolFactory) #REQUIRED>-->
+<!--<!ATTLIST CachePool signleNewInstanceMethod (newInstance) #IMPLIED>-->
 
 <!--Intercept-->
 <!ATTLIST Intercept name CDATA #REQUIRED>
@@ -18,6 +19,7 @@
 <!--Bean-->
 <!ATTLIST Bean name CDATA #REQUIRED>
 <!ATTLIST Bean class CDATA #REQUIRED>
+<!ATTLIST Bean type (class|field) #REQUIRED>
 <!ATTLIST Bean ref CDATA #IMPLIED>
 
 <!--ScanToPack-->

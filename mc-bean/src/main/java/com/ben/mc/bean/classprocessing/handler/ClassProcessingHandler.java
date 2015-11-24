@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.ben.mc.bean.xml.DefaultConfigInfo;
+
 import javassist.CtClass;
 
 /***
@@ -25,6 +27,9 @@ import javassist.CtClass;
  * 
  * @param <O> 传入要解释的ctclazz
  * @param <A> annotation对象
+ * @param <I> Check CtField/CtMethod 注解
+ * @param <II>getCheckII CtClass 获取TYPE注解
+ * @param <R> doProcessing 返回
  */
 public interface ClassProcessingHandler<O, A, I, II, R> {
 
@@ -56,10 +61,15 @@ public interface ClassProcessingHandler<O, A, I, II, R> {
 	 * 		final Map<String, CtClass> REGISTER_CACHE = new ConcurrentHashMap<String, CtClass>();
 	 * 		final Map<String, CtClass> NICK_NAME_CACHE = new ConcurrentHashMap<String, CtClass>();
 	 *		final Map<String, String>  AUTO_LOAD_CACHE = new ConcurrentHashMap<String, String>();
+	 *      xml的情况,ML配置 
+	 *      final Map<String, DefaultConfigInfo> XML_CONFIG_CACHE=new hashmap<String, DefaultConfigInfo>();
+	 *      --[XML_CONFIG_CACHE[XML_CONFIG_CACHE]]。
+	 *      ---XML_CONFIG_CACHE.put(XML_CONFIG_CACHE,
+	 *      ---final DefaultConfigInfo XML_CONFIG_CACHE = (DefaultConfigInfo) config);
 	 * @param O newClass
 	 * @param additional 附加对像 ctfield/ctmethod...
 	 * @return 装拼完成的对象
 	 */
-	public R doProcessing(Map<String, Map> cache, O newClazz, I additional) throws Throwable;
+	public R doProcessing(Map<String, Map> cache, O newClazz, I additional, Object config) throws Throwable;
 
 }

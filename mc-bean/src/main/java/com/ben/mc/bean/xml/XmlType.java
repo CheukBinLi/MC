@@ -8,7 +8,9 @@ public interface XmlType {
 	static final String XmlType_Name = "name";
 	static final String XmlType_Class = "class";
 	static final String XmlType_Ref = "ref";
+	static final String XmlType_Type = "type";
 	static final String XmlType_Methods = "methods";
 	static final String XmlType_SignleNewInstanceMethod = "signleNewInstanceMethod";
+	static final String XmlType_ScanToPack = "ScanToPack";
 
 }

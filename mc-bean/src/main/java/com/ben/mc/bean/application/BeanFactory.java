@@ -11,7 +11,7 @@ import com.ben.mc.cache.DefaultCachePoolFactory;
 
 public class BeanFactory {
 
-	private static final CachePoolFactory cachePoolFactory = new DefaultCachePoolFactory();
+	private static CachePoolFactory cachePoolFactory = new DefaultCachePoolFactory();
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public static <T> T getBean(String name) throws InstantiationException, IllegalAccessException {
@@ -24,6 +24,14 @@ public class BeanFactory {
 		else if (null == A)
 			return null;
 		return (T) ((Class) A).newInstance();
+	}
+
+	public void oo() {
+		System.err.println(cachePoolFactory.getClass().getName());
+	}
+
+	public static void main(String[] args) {
+		new BeanFactory().oo();
 	}
 
 	/***

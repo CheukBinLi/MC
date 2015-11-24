@@ -44,7 +44,7 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 		return Intercept.class;
 	}
 
-	public HandlerInfo doProcessing(Map<String, Map> cache, CtClass newClazz, CtMember additional) throws Throwable {
+	public HandlerInfo doProcessing(Map<String, Map> cache, CtClass newClazz, CtMember additional, Object config) throws Throwable {
 		if (!(additional instanceof CtMethod))
 			return null;
 		CtMethod ctMethod = CtNewMethod.copy((CtMethod) additional, newClazz, null);

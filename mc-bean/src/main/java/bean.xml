@@ -2,12 +2,11 @@
 <!-- <!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd"> -->
 <!DOCTYPE Context SYSTEM "Mc.dtd">
 <Context>
-	<CachePool class="com.ben.mc.cache.DefaultCachePoolFactory" />
-	<Bean name="a1" class="x" />
-	<Bean name="a2" class="x" />
-	<Bean name="a3" class="x" />
-	<Bean name="a4" class="x" />
-	<Bean name="a5" class="x" />
-	<Bean name="a6" class="x" />
+	<Bean name="a1" class="com.ben.mc.AnthingTest.IocTest1" type="class" />
+	<Bean name="a2" class="com.ben.mc.AnthingTest.IocTest1" type="field" />
+	<Bean name="a3" class="com.ben.mc.AnthingTest.IocTest1" type="field" />
+	<Bean name="b1" class="com.ben.mc.AnthingTest.IocTest2" type="class" />
+	<Bean name="c1" class="com.ben.mc.AnthingTest.IocTest3" type="class" />
+	<Bean name="c2" class="com.ben.mc.AnthingTest.IocTest3" type="class" />
 	<Intercept methods="all" name="i" ref="r" class="c" />
 </Context>
