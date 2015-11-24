@@ -13,6 +13,7 @@ import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.bean.util.ShortNameUtil;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
+import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 
 import javassist.CtClass;
 import javassist.CtField;
@@ -44,9 +45,20 @@ public class DefaultXmlAutoLoadHandler extends AbstractClassProcessingHandler<Ct
 
 	@SuppressWarnings({ "rawtypes", "unused" })
 	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional, Object config) throws Throwable {
+		if (!(additional instanceof CtField))
+			return null;
+		CtField o = (CtField) additional;
 		DefaultConfigInfo configInfo = (DefaultConfigInfo) cache.get(ClassProcessingFactory.XML_CONFIG_CACHE).get(ClassProcessingFactory.XML_CONFIG_CACHE);
+		Bean bean = (Bean) config;
+		StringBuffer sb = new StringBuffer();
+		if (cache.get(ClassProcessingFactory.REGISTER_CACHE).containsKey(bean.getRef())) {
+			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
+			//				sb.append("field.setAccessible(true);");
+			sb.append("field.set(this, new ").append(bean.getRef() + DefaultClassProcessingFactory.Impl).append("());");
+		} else
+			throw new Throwable(String.format("%s没有注册实例，请在Ban中配置相关参数。 ", bean.getRef()));
 
-		return null;
+		return new HandlerInfo(sb.toString(), newClass, additional, null);
 	}
 
 	protected String makeField(CtField o, String implClassName) throws NotFoundException {

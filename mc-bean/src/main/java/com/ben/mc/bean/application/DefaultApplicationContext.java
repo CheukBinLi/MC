@@ -3,6 +3,7 @@ package com.ben.mc.bean.application;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
@@ -47,12 +48,12 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		//		clazz.toClass();
 		//		new BeanFactory().oo();
 		//bean
-		Map<String, CtClass> beans;
-		ClassProcessingFactory dcpf = new DefaultXmlClassProcessingFactory() {
-		};
-		beans = dcpf.getCompleteClass(null, configInfo);
-
 		//intercept
+		Map<String, CtClass> beans;
+		DefaultXmlClassProcessingFactory dcpf = new DefaultXmlClassProcessingFactory() {
+		};
+		//xml
+		List<Map<String, CtClass>> xmlBeanQueue = dcpf.getCompleteClass(null, configInfo);
 		//ScanToPack
 
 	}

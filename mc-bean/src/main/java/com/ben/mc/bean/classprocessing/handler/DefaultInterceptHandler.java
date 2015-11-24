@@ -50,7 +50,7 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 		CtMethod ctMethod = CtNewMethod.copy((CtMethod) additional, newClazz, null);
 		boolean isReturn = !ctMethod.getReturnType().getName().equals("void");
 		//		private com.ben.mc.classprocessing.handler.Interception interception = new com.ben.mc.classprocessing.handler.DefaultInterception();
-		String imp = String.format("private com.ben.mc.classprocessing.handler.Interception interception = new %s();", this.a.value());
+		String imp = String.format("private com.ben.mc.bean.classprocessing.handler.Interception interception = new %s();", this.a.value());
 		try {
 			if (null == newClazz.getDeclaredField("interception"))
 				newClazz.addField(CtField.make(imp, newClazz));

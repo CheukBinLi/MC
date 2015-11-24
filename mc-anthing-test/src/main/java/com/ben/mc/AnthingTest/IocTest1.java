@@ -5,7 +5,7 @@ import com.ben.mc.annotation.Intercept;
 import com.ben.mc.annotation.Register;
 
 @Register
-@Intercept("com.ben.mc.classprocessing.handler.DefaultInterception")
+@Intercept("com.ben.mc.bean.classprocessing.handler.DefaultInterception")
 public class IocTest1 {
 
 	private final static int a = 1;

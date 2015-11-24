@@ -1,6 +1,7 @@
 package com.ben.mc.AnthingTest.code_test;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
@@ -23,13 +24,13 @@ public class Scan_Classprocessing {
 		//		o.x();
 		//2.0
 
-		ClassProcessingFactory<CtClass> classProcessingFactory = new DefaultClassProcessingFactory() {
+		ClassProcessingFactory<List<Map<String, CtClass>>> classProcessingFactory = new DefaultClassProcessingFactory() {
 		};
 
-		Map<String, CtClass> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"),null);
+		List<Map<String, CtClass>> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"), null);
 
-		for (Entry<String, CtClass> en : result.entrySet())
-			System.out.println(en.getValue().getName());
+		//		for (Entry<String, CtClass> en : result.entrySet())
+		//			System.out.println(en.getValue().getName());
 
 		//		Thread.sleep(50);
 		//		AutoLoadTestI i = BeanFactory.getBean("autoLoadTestI");
