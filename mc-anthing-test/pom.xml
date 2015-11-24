@@ -16,19 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ben</groupId>
-			<artifactId>mc-classprocessing</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.ben</groupId>
-			<artifactId>mc-util</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.ben</groupId>
-			<artifactId>mc-scan</artifactId>
+			<artifactId>mc-bean</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
