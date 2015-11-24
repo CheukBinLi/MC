@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd">
+<!-- <!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd"> -->
+<!DOCTYPE Context SYSTEM "Mc.dtd">
 <Context>
 	<CachePool class="com.ben.mc.cache.DefaultCachePoolFactory" />
 	<Bean name="a1" class="x" />

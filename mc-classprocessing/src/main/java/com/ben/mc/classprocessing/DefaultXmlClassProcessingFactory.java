@@ -9,17 +9,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javassist.CtClass;
 
-@SuppressWarnings({ "rawtypes", "unchecked","unused" })
+@SuppressWarnings({ "rawtypes", "unused" })
 public abstract class DefaultXmlClassProcessingFactory implements ClassProcessingFactory<CtClass> {
 
 	public Map<String, CtClass> getCompleteClass(Set<String> clazzs, Object config) throws InterruptedException {
 		
 		
 		
+		
 		return null;
 	}
 
-	@SuppressWarnings("unused")
 	private ClassInfo scanClass(Class c, boolean isConcurrent) {
 		Map<String, Field> fields = null;
 		Map<String, Method> methods = null;
@@ -28,7 +28,8 @@ public abstract class DefaultXmlClassProcessingFactory implements ClassProcessin
 			final Map<String, Method> m = new ConcurrentHashMap<String, Method>();
 			fields = f;
 			methods = m;
-		} else {
+		}
+		else {
 			final Map<String, Field> f = new HashMap<String, Field>();
 			final Map<String, Method> m = new HashMap<String, Method>();
 			fields = f;
