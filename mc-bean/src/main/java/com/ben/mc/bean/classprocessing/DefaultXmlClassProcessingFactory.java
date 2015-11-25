@@ -72,7 +72,7 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 			tempEn = it.next();
 			tempClazz = pool.get(tempEn.getValue().getClassName());
 			complete.put(tempEn.getValue().getClassName(), tempClazz);
-			nick.put(tempEn.getKey(), tempEn.getValue().getName());
+			nick.put(tempEn.getKey(), tempEn.getValue().getClassName());
 			shortName.put(ShortNameUtil.makeShortName(tempEn.getValue().getClassName()), tempEn.getValue().getClassName());
 
 			//任务列表分组
@@ -166,8 +166,8 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 			newClass.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 		}
 
-		Object o2;
-		anthingToClass(compileObject);
+		//		Object o2;
+		//		anthingToClass(compileObject);
 
 		return compileObject;
 	}

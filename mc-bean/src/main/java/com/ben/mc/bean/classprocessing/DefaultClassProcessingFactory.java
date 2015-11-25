@@ -194,6 +194,7 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
+			System.out.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
 			newClazz.addConstructor(defauleConstructor);
@@ -233,8 +234,8 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 			//				e.printStackTrace();
 			//			}
 		}
+		//				anthingToClass(compileObject);
 		return compileObject;
-		//		anthingToClass(compileObject);
 	}
 
 }

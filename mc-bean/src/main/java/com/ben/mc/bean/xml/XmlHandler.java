@@ -76,6 +76,9 @@ public class XmlHandler extends DefaultHandler {
 		else if (defaultConfigInfo.isCachePool(qName)) {
 			defaultConfigInfo.setCachePool(new CachePool().fill(attributes));
 		}
+		else if (defaultConfigInfo.isScanToPack(qName)) {
+			defaultConfigInfo.setScanToPack(attributes);
+		}
 		super.startElement(uri, localName, qName, attributes);
 	}
 

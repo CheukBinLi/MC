@@ -51,11 +51,15 @@ public class DefaultXmlAutoLoadHandler extends AbstractClassProcessingHandler<Ct
 		DefaultConfigInfo configInfo = (DefaultConfigInfo) cache.get(ClassProcessingFactory.XML_CONFIG_CACHE).get(ClassProcessingFactory.XML_CONFIG_CACHE);
 		Bean bean = (Bean) config;
 		StringBuffer sb = new StringBuffer();
-		if (cache.get(ClassProcessingFactory.REGISTER_CACHE).containsKey(bean.getRef())) {
+		String refName = null;
+		if (null != (refName = cache.get(ClassProcessingFactory.NICK_NAME_CACHE).get(bean.getRef()).toString()) || null != (refName = ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(bean.getRef())).getName())) {
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
 			//				sb.append("field.setAccessible(true);");
-			sb.append("field.set(this, new ").append(bean.getRef() + DefaultClassProcessingFactory.Impl).append("());");
-		} else
+			//			sb.append("field.set(this, new ").append(refName + DefaultClassProcessingFactory.Impl).append("());");
+
+			sb.append("field.set(this, BeanFactory.getBean(\"").append(refName).append("\"));");
+		}
+		else
 			throw new Throwable(String.format("%s没有注册实例，请在Ban中配置相关参数。 ", bean.getRef()));
 
 		return new HandlerInfo(sb.toString(), newClass, additional, null);

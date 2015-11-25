@@ -2,6 +2,10 @@
 <!-- <!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd"> -->
 <!DOCTYPE Context SYSTEM "Mc.dtd">
 <Context>
-	<Bean name="autoLoadTestImpl" class="com.ben.mc.AnthingTest.IocTest1" type="field" ref="com.ben.mc.AnthingTest.AutoLoadTestImpl"/>
-	<Bean name="a1" class="com.ben.mc.AnthingTest.AutoLoadTestImpl" type="class" />
+	<Bean name="autoLoadTestImpl" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="field" ref="xxxxxxxxxxx110" />
+	<Bean name="xml1" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="class" />
+	<Bean name="xml2" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest2" type="class" />
+	<Bean name="xml3" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest3" type="class" />
+	<Bean name="xxxxxxxxxxx110" class="com.ben.mc.AnthingTest.mc.xml.XmlAutoLoadTestImpl" type="class" />
+	<ScanToPack values="com.ben.mc.AnthingTest" />
 </Context>

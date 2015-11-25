@@ -1,6 +1,5 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.util.Map;
 import java.util.Set;
 
 public interface ClassProcessingFactory<C> {

@@ -188,4 +188,9 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 		return this;
 	}
 
+	public DefaultConfigInfo setScanToPack(Attributes a) {
+		this.scanToPack = a.getValue(XmlType_Values);
+		return this;
+	}
+
 }

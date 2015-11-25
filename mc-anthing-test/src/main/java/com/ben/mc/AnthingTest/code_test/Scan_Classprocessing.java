@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-import com.ben.mc.AnthingTest.IocTest1;
+import com.ben.mc.AnthingTest.mc.scan.IocTest1;
 import com.ben.mc.bean.application.BeanFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
@@ -27,7 +27,7 @@ public class Scan_Classprocessing {
 		ClassProcessingFactory<List<Map<String, CtClass>>> classProcessingFactory = new DefaultClassProcessingFactory() {
 		};
 
-		List<Map<String, CtClass>> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest"), null);
+		List<Map<String, CtClass>> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest.*.*"), null);
 
 		//		for (Entry<String, CtClass> en : result.entrySet())
 		//			System.out.println(en.getValue().getName());

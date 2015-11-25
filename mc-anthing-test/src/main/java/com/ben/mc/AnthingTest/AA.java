@@ -1,5 +1,6 @@
 package com.ben.mc.AnthingTest;
 
+import com.ben.mc.AnthingTest.mc.scan.AutoLoadTestImpl;
 
 public class AA extends A {
 

@@ -27,14 +27,6 @@ public class BeanFactory {
 		return (T) ((Class) A).newInstance();
 	}
 
-	public void oo() {
-		System.err.println(cachePoolFactory.getClass().getName());
-	}
-
-	public static void main(String[] args) {
-		new BeanFactory().oo();
-	}
-
 	/***
 	 * 
 	 * @param value

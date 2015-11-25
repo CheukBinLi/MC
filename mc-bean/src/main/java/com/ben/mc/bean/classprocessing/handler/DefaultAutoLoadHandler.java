@@ -42,7 +42,7 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional,Object config) throws Throwable {
+	public HandlerInfo doProcessing(final Map<String, Map> cache, CtClass newClass, CtMember additional, Object config) throws Throwable {
 		if (!(additional instanceof CtField))
 			return null;
 		CtField o = (CtField) additional;
@@ -53,14 +53,11 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		if (this.a.value().length() > 0) {
 			nick = cache.get(ClassProcessingFactory.NICK_NAME_CACHE).get(this.a.value()).toString();
 			if (null != nick) {
-				//				o = CtField.make(makeField(o, ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(nick)).getName()), newClass);
-				//				return o;
 				nick = ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(nick)).getName();
-				//				return new AutoLoadList(makeField(o, nick), nick);
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-				//				sb.append("field.setAccessible(true);");
-				sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
+				//				sb.append("field.set(this, BeanFactory.getBean((" + nick + ")").append(nick).append("));");
+				sb.append("field.set(this, BeanFactory.getBean(\"").append(nick).append("\"));");
 				return new HandlerInfo(sb.toString(), nick);
 
 			}
@@ -71,8 +68,8 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		if (nick != null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-			//			sb.append("field.setAccessible(true);");
-			sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
+			//			sb.append("field.set(this, BeanFactory.getBean(").append(nick).append("));");
+			sb.append("field.set(this, BeanFactory.getBean(\"").append(nick).append("\"));");
 			return new HandlerInfo(sb.toString(), nick);
 		}
 
@@ -81,25 +78,10 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 			//模糊匹配
 			if (tempEn.getValue().subtypeOf(o.getType())) {
 				cache.get(ClassProcessingFactory.AUTO_LOAD_CACHE).put(o.getType().getName(), tempEn.getValue().getName());//自动装载
-				//				String a = String.format("%s %s %s=new %s%s();", Modifier.toString(o.getModifiers()), o.getType().getName(), o.getName(), tempEn.getValue().getName(), ClassProcessingFactory.Impl);
-				//				System.err.println(a);
-				//				Annotation a = new Annotation("java.lang.Override", o.getFieldsInfo().getConstPool());
-				//				AnnotationsAttribute aa = new AnnotationsAttribute(o.getFieldsInfo().getConstPool(), AnnotationsAttribute.visibleTag);
-				//				aa.addAnnotation(a);
-				//				o.getFieldsInfo().addAttribute(aa);
-				//				newClass.addField(o);
-				//				o = CtField.make(makeField(o, tempEn.getValue().getName()), newClass);
-				//				return o;
-				//**************
-				//				return new AutoLoadList(makeField(o, tempEn.getValue().getName()), tempEn.getValue().getName());
-				//				Field field = this.getClass().getSuperclass().getDeclaredField("a1");
-				//				field.setAccessible(true);
-				//				field.set(this, new AA());
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-				//				sb.append("java.lang.reflect.Field field = (java.lang.reflect.Field)BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\")").append(".getFields().get(\"").append(o.getName()).append("\");");
-				//				sb.append("field.setAccessible(true);");
-				sb.append("field.set(this, new ").append(tempEn.getValue().getName() + DefaultClassProcessingFactory.Impl).append("());");
+				//				sb.append("field.set(this, BeanFactory.getBean(").append(tempEn.getValue().getName()).append("));");
+				sb.append("field.set(this, BeanFactory.getBean(\"").append(tempEn.getValue().getName()).append("\"));");
 				return new HandlerInfo(sb.toString(), tempEn.getValue().getName());
 			}
 		}
@@ -141,5 +123,21 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		System.err.println(ax4 + ax3);
 
 	}
+
+	//	static {
+	//		java.lang.reflect.Field field = BeanFactory.getClassInfoField("com.ben.mc.AnthingTest.mc.scan.IocTest1$MC_IMPL", "autoLoadTestImpl");
+	//		try {
+	//			field.set("", BeanFactory.getBean("com.ben.mc.AnthingTest.mc.scan.AutoLoadTestImpl"));
+	//		} catch (IllegalArgumentException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		} catch (IllegalAccessException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		} catch (InstantiationException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//	}
 
 }

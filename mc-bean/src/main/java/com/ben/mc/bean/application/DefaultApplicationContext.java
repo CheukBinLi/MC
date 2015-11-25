@@ -2,13 +2,18 @@ package com.ben.mc.bean.application;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.ben.mc.bean.classprocessing.AbstractClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultXmlClassProcessingFactory;
+import com.ben.mc.bean.scan.Scan;
+import com.ben.mc.bean.util.ShortNameUtil;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
 import com.ben.mc.bean.xml.XmlHandler;
 import com.ben.mc.cache.CachePoolFactory;
@@ -50,12 +55,29 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		//bean
 		//intercept
 		Map<String, CtClass> beans;
-		DefaultXmlClassProcessingFactory dcpf = new DefaultXmlClassProcessingFactory() {
-		};
+		AbstractClassProcessingFactory<List<Map<String, CtClass>>> xmlX = new DefaultXmlClassProcessingFactory();
+		AbstractClassProcessingFactory<List<Map<String, CtClass>>> scanToPack = new DefaultClassProcessingFactory();
 		//xml
-		List<Map<String, CtClass>> xmlBeanQueue = dcpf.getCompleteClass(null, configInfo);
+		List<Map<String, CtClass>> xmlBeanQueue = xmlX.getCompleteClass(null, configInfo);
 		//ScanToPack
-
+		List<Map<String, CtClass>> scanToPackQueue = null;
+		if (null != configInfo.getScanToPack()) {
+			scanToPackQueue = scanToPack.getCompleteClass(Scan.doScan(configInfo.getScanToPack()), null);
+		}
+		//生成
+		xmlX.anthingToClass(xmlBeanQueue);
+		xmlX.anthingToClass(scanToPackQueue);
+		//		for (int i = 0, len = xmlBeanQueue.size(); i < len; i++) {
+		//			for (Entry<String, CtClass> en : xmlBeanQueue.get(i).entrySet()) {
+		//				System.out.println(en.getValue().getName());
+		//			}
+		//		}
+		//		System.out.println("------------");
+		//		for (int i = 0, len = scanToPackQueue.size(); i < len; i++) {
+		//			for (Entry<String, CtClass> en : scanToPackQueue.get(i).entrySet()) {
+		//				System.out.println(en.getValue().getName());
+		//			}
+		//		}
 	}
 
 	public DefaultApplicationContext() {

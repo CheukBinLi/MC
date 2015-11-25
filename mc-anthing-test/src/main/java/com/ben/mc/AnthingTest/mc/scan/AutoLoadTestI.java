@@ -1,4 +1,4 @@
-package com.ben.mc.AnthingTest;
+package com.ben.mc.AnthingTest.mc.scan;
 
 public interface AutoLoadTestI {
 

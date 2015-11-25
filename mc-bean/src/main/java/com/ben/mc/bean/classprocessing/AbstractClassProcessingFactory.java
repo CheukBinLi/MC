@@ -18,7 +18,9 @@ import javassist.CtClass;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractClassProcessingFactory<C> implements ClassProcessingFactory<C> {
 
-	protected void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
+	public void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
+		if (null == compileObject)
+			return;
 		for (int i = 0, len = compileObject.size(); i < len; i++) {
 			for (Entry<String, CtClass> en : compileObject.get(i).entrySet()) {
 				final Class c = en.getValue().toClass();
