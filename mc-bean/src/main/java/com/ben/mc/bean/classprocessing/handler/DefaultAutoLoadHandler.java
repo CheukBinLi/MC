@@ -10,7 +10,6 @@ import java.util.Set;
 import com.ben.mc.annotation.AutoLoad;
 import com.ben.mc.bean.application.BeanFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
-import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.bean.util.ShortNameUtil;
 
 import javassist.CtClass;

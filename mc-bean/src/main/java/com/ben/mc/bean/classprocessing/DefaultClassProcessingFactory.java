@@ -10,16 +10,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMember;
-import javassist.CtMethod;
-import javassist.CtNewConstructor;
-import javassist.NotFoundException;
-import javassist.bytecode.DuplicateMemberException;
-
 import com.ben.mc.annotation.AutoLoad;
 import com.ben.mc.annotation.Register;
 import com.ben.mc.bean.application.BeanFactory;
@@ -29,6 +19,17 @@ import com.ben.mc.bean.classprocessing.handler.DefaultInterceptHandler;
 import com.ben.mc.bean.classprocessing.handler.HandlerInfo;
 import com.ben.mc.bean.util.ExecutorServiceFatory;
 import com.ben.mc.bean.util.ShortNameUtil;
+
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
+import javassist.CtMember;
+import javassist.CtMethod;
+import javassist.CtNewConstructor;
+import javassist.NotFoundException;
+import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class DefaultClassProcessingFactory extends AbstractClassProcessingFactory<List<Map<String, CtClass>>> {
@@ -87,8 +88,10 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				while (--count >= 0) {
 					if (this.falgs)
 						className = xmlAppendList.get(count);
+
 					ClassPool pool = ClassPool.getDefault();
 					CtClass clazz = pool.get(className);
+
 					Object o = clazz.getAnnotation(Register.class);
 					if (null == o)
 						continue;
@@ -125,7 +128,6 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 		Iterator<Entry<String, CtClass>> it = classCache.get(REGISTER_CACHE).entrySet().iterator();
 
 		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
-		List<HandlerInfo> handlerInfos = new ArrayList<HandlerInfo>();
 		//		Set<CtField> additionalField = new HashSet<CtField>();//附加字段
 		//		Set<CtMethod> additionalMethod = new HashSet<CtMethod>();//附加方法
 
@@ -138,8 +140,10 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 
 		Entry<String, CtClass> en;
 		int level = 0;
+		List<HandlerInfo> handlerInfos = null;
 		while (it.hasNext()) {
 			level = 0;
+			handlerInfos = new ArrayList<HandlerInfo>();
 			en = it.next();
 			CtClass tempClazz = en.getValue();
 			CtClass newClazz = tempClazz.getClassPool().makeClass(tempClazz.getName() + Impl);
@@ -178,7 +182,12 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				A1.put(en.getKey(), newClazz);
 			else
 				A2.put(en.getKey(), newClazz);
-
+			//Import
+			newClazz.getClassPool().importPackage("java.lang.Exception");
+			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
+			newClazz.getClassPool().importPackage("java.lang.reflect.Method");
+			newClazz.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
+			newClazz.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 			//建立构造、构造加载
 			CtConstructor tempC;
 			CtConstructor[] ctConstructors = tempClazz.getDeclaredConstructors();
@@ -196,7 +205,7 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 			sb.append("}");
 			System.out.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
-			
+
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
 			newClazz.addConstructor(defauleConstructor);
 			try {
@@ -223,11 +232,6 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 			//			while (itMethod.hasNext())
 			//				newClazz.addMethod(itMethod.next());
 
-			newClazz.getClassPool().importPackage("java.lang.Exception");
-			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
-			newClazz.getClassPool().importPackage("java.lang.reflect.Method");
-			newClazz.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
-			newClazz.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 			//反编查看
 			//			try {
 			//				tempClazz.writeFile("C:/Users/Ben/Desktop");

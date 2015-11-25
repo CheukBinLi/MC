@@ -18,6 +18,16 @@ import javassist.CtClass;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractClassProcessingFactory<C> implements ClassProcessingFactory<C> {
 
+	static final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+	static Method addClass = null;
+
+	static {
+		Method[] mx = java.lang.ClassLoader.class.getDeclaredMethods();
+		for (Method m : mx)
+			if ("addClass".contentEquals(m.getName()))
+				addClass = m;
+	}
+
 	public void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
 		LinkedList<Entry<String, CtClass>> errorQueue = new LinkedList<Entry<String, CtClass>>();
 		if (null == compileObject)
@@ -29,14 +39,26 @@ public abstract class AbstractClassProcessingFactory<C> implements ClassProcessi
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
 				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
+
+				//				if (fillClassLoader)
+				//					if (null != addClass)
+				//						try {
+				//							addClass.invoke(cl, c);
+				//						} catch (Exception e1) {
+				//							e1.printStackTrace();
+				//							throw new CannotCompileException(e1);
+				//						}
+				//					else
+				//						throw new CannotCompileException("加载失败");
+
 				//搜索class
 				//				BeanFactory.addClassInfo(scanClass(c, false ));
 				//				//反编查看
 				//				try {
 				//					en.getValue().writeFile("C:/Users/Ben/Desktop");
-				//				} catch (IOException e) {
-				//					errorQueue.add(en);
-				//					//					e.printStackTrace();
+				//				} catch (Exception e) {
+				//					//					errorQueue.add(en);
+				//					e.printStackTrace();
 				//				}
 			}
 		}

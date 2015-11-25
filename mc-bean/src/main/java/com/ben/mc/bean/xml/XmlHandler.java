@@ -79,6 +79,9 @@ public class XmlHandler extends DefaultHandler {
 		else if (defaultConfigInfo.isScanToPack(qName)) {
 			defaultConfigInfo.setScanToPack(attributes);
 		}
+		//		else if (defaultConfigInfo.isInitClassLoader(qName)) {
+		//			defaultConfigInfo.setInitClassLoader(attributes);
+		//		}
 		super.startElement(uri, localName, qName, attributes);
 	}
 

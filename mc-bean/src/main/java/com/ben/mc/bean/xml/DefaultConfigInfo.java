@@ -24,6 +24,10 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 		return XmlType_ScanToPack.equals(tag);
 	}
 
+	public boolean isInitClassLoader(String tag) {
+		return XmlType_InitClassLoader.equals(tag);
+	}
+
 	private static final long serialVersionUID = 1L;
 	private CachePool cachePool;
 	private String scanToPack;
@@ -192,7 +196,7 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 	}
 
 	public DefaultConfigInfo setScanToPack(Attributes a) {
-		this.scanToPack = a.getValue(XmlType_Values);
+		this.scanToPack = a.getValue(XmlType_Value);
 		return this;
 	}
 

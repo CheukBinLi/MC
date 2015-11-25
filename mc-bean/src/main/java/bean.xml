@@ -3,14 +3,14 @@
 <!DOCTYPE Context SYSTEM "Mc.dtd">
 <Context>
 	<Bean name="autoLoadTestImpl" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="field" ref="xxxxxxxxxxx110" />
-	
+
 	<Bean name="xxxxxxxxxxx110" class="com.ben.mc.AnthingTest.mc.xml.XmlAutoLoadTestImpl" type="class" />
-	
+
 	<Bean name="xml1" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="class" />
 	<Bean name="xml2" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest2" type="class" />
 	<Bean name="xml3" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest3" type="class" />
-	
+
 	<Intercept methods="all" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" name="intercept0083" ref="com.ben.mc.AnthingTest.mc.xml.DefaultInterceptionXml" />
-	
-	<ScanToPack values="org.ben.mc.AnthingTest,com.**.AnthingTest" />
+
+	<ScanToPack value="org.ben.mc.AnthingTest,com.**.AnthingTest" />
 </Context>

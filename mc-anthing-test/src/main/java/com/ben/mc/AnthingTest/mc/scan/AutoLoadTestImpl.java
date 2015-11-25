@@ -2,7 +2,7 @@ package com.ben.mc.AnthingTest.mc.scan;
 
 import com.ben.mc.annotation.Register;
 
-@Register("autoLoadTestI")
+@Register
 public class AutoLoadTestImpl implements AutoLoadTestI {
 
 	public void hello(String name) {

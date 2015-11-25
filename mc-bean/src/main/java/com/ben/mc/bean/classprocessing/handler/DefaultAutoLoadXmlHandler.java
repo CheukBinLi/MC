@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
-import com.ben.mc.bean.classprocessing.DefaultClassProcessingXmlFactory;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 

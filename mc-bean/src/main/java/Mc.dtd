@@ -23,4 +23,4 @@
 <!ATTLIST Bean ref CDATA #IMPLIED>
 
 <!--ScanToPack-->
-<!ATTLIST ScanToPack values CDATA #REQUIRED>
+<!ATTLIST ScanToPack value CDATA #REQUIRED>

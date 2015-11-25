@@ -1,29 +1,23 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 
 import com.ben.mc.bean.application.BeanFactory;
-import com.ben.mc.bean.application.DefaultApplicationContext;
-import com.ben.mc.bean.classprocessing.handler.ClassProcessingHandler;
 import com.ben.mc.bean.classprocessing.handler.DefaultAutoLoadXmlHandler;
 import com.ben.mc.bean.classprocessing.handler.DefaultInterceptXmlHandler;
 import com.ben.mc.bean.classprocessing.handler.HandlerInfo;
 import com.ben.mc.bean.util.ShortNameUtil;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
-import com.ben.mc.bean.xml.XmlType;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Intercept;
+import com.ben.mc.bean.xml.XmlType;
 import com.ben.mc.cache.DefaultCachePoolFactory;
 
 import javassist.ClassPool;
@@ -32,7 +26,6 @@ import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewConstructor;
-import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unused" })
