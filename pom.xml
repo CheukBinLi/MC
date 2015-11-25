@@ -22,11 +22,8 @@
 	</dependencies>
 	<modules>
 		<module>mc-cache</module>
-		<module>mc-scan</module>
-		<module>mc-util</module>
-		<module>mc-classprocessing</module>
 		<module>mc-annotation</module>
 		<module>mc-anthing-test</module>
-    <module>mc-bean</module>
-  </modules>
+		<module>mc-bean</module>
+	</modules>
 </project>
