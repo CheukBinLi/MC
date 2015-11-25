@@ -16,11 +16,14 @@ import java.util.concurrent.CountDownLatch;
 import com.ben.mc.bean.application.BeanFactory;
 import com.ben.mc.bean.application.DefaultApplicationContext;
 import com.ben.mc.bean.classprocessing.handler.ClassProcessingHandler;
-import com.ben.mc.bean.classprocessing.handler.DefaultXmlAutoLoadHandler;
+import com.ben.mc.bean.classprocessing.handler.DefaultAutoLoadXmlHandler;
+import com.ben.mc.bean.classprocessing.handler.DefaultInterceptXmlHandler;
 import com.ben.mc.bean.classprocessing.handler.HandlerInfo;
 import com.ben.mc.bean.util.ShortNameUtil;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
+import com.ben.mc.bean.xml.XmlType;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
+import com.ben.mc.bean.xml.DefaultConfigInfo.Intercept;
 import com.ben.mc.cache.DefaultCachePoolFactory;
 
 import javassist.ClassPool;
@@ -33,7 +36,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unused" })
-public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFactory<List<Map<String, CtClass>>> {
+public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFactory<List<Map<String, CtClass>>> {
 
 	public List<Map<String, CtClass>> getCompleteClass(Set<String> clazzs, Object config) throws Throwable {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
@@ -51,7 +54,6 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 		cache.put(ClassProcessingFactory.XML_CONFIG_CACHE, configMap);
 		//分组
 		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
-		final List<HandlerInfo> handlerInfos = new ArrayList<HandlerInfo>();
 
 		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
 		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
@@ -59,7 +61,6 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 		compileObject.add(A1);
 		compileObject.add(A2);
 		//		compileObject.add(A3);
-		int level = 0;
 
 		configInfo.getBeans();
 		Iterator<Entry<String, Bean>> it = configInfo.getBeans().entrySet().iterator();
@@ -93,8 +94,8 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 			}
 		//			System.err.println(en.getKey());
 
-		DefaultXmlAutoLoadHandler autoLoadHandler = new DefaultXmlAutoLoadHandler();
-
+		DefaultAutoLoadXmlHandler autoLoadHandler = new DefaultAutoLoadXmlHandler();
+		DefaultInterceptXmlHandler interceptHandler = new DefaultInterceptXmlHandler();
 		Iterator<Entry<String, CtClass>> ctEn = complete.entrySet().iterator();
 		Entry<String, CtClass> tempCtEn;
 		CtClass superClass;
@@ -102,15 +103,37 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 		CtField[] ctFields;
 		CtMethod[] ctMethods;
 		HandlerInfo handlerInfo;
+		Intercept intercept = null;
+		boolean allIntercept;
+		boolean isIntercept;
+		Object interceptStr;
+		Intercept tempIntercept;
+		List<HandlerInfo> handlerInfos;
+		int level = 0;
 		while (ctEn.hasNext()) {
+			level = 0;
+			handlerInfos = new ArrayList<HandlerInfo>();
 			tempCtEn = ctEn.next();
 			superClass = tempCtEn.getValue();
 			newClass = superClass.getClassPool().makeClass(superClass.getName() + Impl);
 			newClass.setSuperclass(superClass);
 			ctFields = superClass.getDeclaredFields();
 			ctMethods = superClass.getDeclaredMethods();
-			//			tempBean = configInfo.getBeans().get(key);
+			interceptStr = configInfo.getIntercepts().get(superClass.getName());
+			System.err.println(superClass.getName());
+			allIntercept = false;
+			isIntercept = false;
+			if (null != interceptStr) {
+				intercept = (Intercept) interceptStr;
+				if (null != (interceptStr = intercept.getMethods())) {
+					if (XmlType.XmlType_All.equals(interceptStr)) {
+						allIntercept = true;
+					}
+					isIntercept = true;
+				}
+			}
 			Map<String, Bean> tempB = DefaultCachePoolFactory.newInstance().get4Map(beans, superClass.getName(), "field");
+			//注入
 			for (CtField f : ctFields)
 				for (Entry<String, Bean> en : tempB.entrySet()) {
 					if (f.getName().equals(en.getKey())) {
@@ -121,10 +144,34 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 						level++;
 					}
 				}
+
+			for (CtMethod m : ctMethods) {//Method
+				if (allIntercept || (isIntercept && interceptStr.toString().contentEquals(m.getName()))) {
+					//						handlerInfos.add();
+					handlerInfo = interceptHandler.doProcessing(null, newClass, m, intercept);
+					if (null == handlerInfo)
+						continue;
+					handlerInfos.add(handlerInfo);
+					newClass = handlerInfo.getNewClazz();
+					level++;
+				}
+			}
 			if (level == 0)
 				A1.put(tempCtEn.getKey(), newClass);
 			else
 				A2.put(tempCtEn.getKey(), newClass);
+			//Import
+			for (HandlerInfo h : handlerInfos) {
+				if (null != h.getImports())
+					for (String s : h.getImports()) {
+						newClass.getClassPool().importPackage(s);
+					}
+			}
+			newClass.getClassPool().importPackage("java.lang.Exception");
+			newClass.getClassPool().importPackage("java.lang.reflect.Field");
+			newClass.getClassPool().importPackage("java.lang.reflect.Method");
+			newClass.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
+			newClass.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 			//建立构造、构造加载
 			CtConstructor tempC;
 			CtConstructor[] ctConstructors = superClass.getDeclaredConstructors();
@@ -152,18 +199,6 @@ public class DefaultXmlClassProcessingFactory extends AbstractClassProcessingFac
 			} catch (DuplicateMemberException e) {
 				//				e.printStackTrace();
 			}
-			//Import
-			for (HandlerInfo h : handlerInfos) {
-				if (null != h.getImports())
-					for (String s : h.getImports()) {
-						newClass.getClassPool().importPackage(s);
-					}
-			}
-			newClass.getClassPool().importPackage("java.lang.Exception");
-			newClass.getClassPool().importPackage("java.lang.reflect.Field");
-			newClass.getClassPool().importPackage("java.lang.reflect.Method");
-			newClass.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
-			newClass.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 		}
 
 		//		Object o2;

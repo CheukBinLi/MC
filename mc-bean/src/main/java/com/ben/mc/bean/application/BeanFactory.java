@@ -17,9 +17,9 @@ public class BeanFactory {
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public static <T> T getBean(String name) throws InstantiationException, IllegalAccessException {
 		Object A;
-		A = cachePoolFactory.get4Map(ClassProcessingFactory.NICK_NAME_BEAN, ShortNameUtil.objectHumpNameLower(name));
+		A = cachePoolFactory.get4Map(ClassProcessingFactory.FULL_NAME_BEAN, name);
 		if (null == A)
-			A = cachePoolFactory.get4Map(ClassProcessingFactory.FULL_NAME_BEAN, name);
+			A = cachePoolFactory.get4Map(ClassProcessingFactory.NICK_NAME_BEAN, ShortNameUtil.objectHumpNameLower(name));
 		else if (null == A)
 			A = cachePoolFactory.get4Map(ClassProcessingFactory.SHORT_NAME_BEAN, name);
 		else if (null == A)

@@ -28,6 +28,9 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 	private CachePool cachePool;
 	private String scanToPack;
 	private Map<String, Bean> beans = new HashMap<String, DefaultConfigInfo.Bean>();
+	/***
+	 * 一个CLASS只有一条拦截记录
+	 */
 	private Map<String, Intercept> intercepts = new HashMap<String, DefaultConfigInfo.Intercept>();
 
 	public CachePool getCachePool() {

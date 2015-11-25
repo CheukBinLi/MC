@@ -13,5 +13,6 @@ public interface XmlType {
 	static final String XmlType_SignleNewInstanceMethod = "signleNewInstanceMethod";
 	static final String XmlType_ScanToPack = "ScanToPack";
 	static final String XmlType_Values = "values";
+	static final String XmlType_All = "all";
 
 }

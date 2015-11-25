@@ -71,7 +71,7 @@ public class XmlHandler extends DefaultHandler {
 		}
 		else if (defaultConfigInfo.isIntercepts(qName)) {
 			intercept = new Intercept().fill(attributes);
-			defaultConfigInfo.getIntercepts().put(intercept.getName(), intercept);
+			defaultConfigInfo.getIntercepts().put(intercept.getClassName(), intercept);
 		}
 		else if (defaultConfigInfo.isCachePool(qName)) {
 			defaultConfigInfo.setCachePool(new CachePool().fill(attributes));

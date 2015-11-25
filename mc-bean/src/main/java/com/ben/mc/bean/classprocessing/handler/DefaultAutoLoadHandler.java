@@ -56,8 +56,8 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				nick = ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(nick)).getName();
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-				//				sb.append("field.set(this, BeanFactory.getBean((" + nick + ")").append(nick).append("));");
 				sb.append("field.set(this, BeanFactory.getBean(\"").append(nick).append("\"));");
+				//				sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
 				return new HandlerInfo(sb.toString(), nick);
 
 			}
@@ -68,8 +68,8 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 		if (nick != null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-			//			sb.append("field.set(this, BeanFactory.getBean(").append(nick).append("));");
 			sb.append("field.set(this, BeanFactory.getBean(\"").append(nick).append("\"));");
+			//			sb.append("field.set(this, new ").append(nick + DefaultClassProcessingFactory.Impl).append("());");
 			return new HandlerInfo(sb.toString(), nick);
 		}
 
@@ -80,8 +80,8 @@ public class DefaultAutoLoadHandler extends AbstractClassProcessingHandler<CtCla
 				cache.get(ClassProcessingFactory.AUTO_LOAD_CACHE).put(o.getType().getName(), tempEn.getValue().getName());//自动装载
 				StringBuffer sb = new StringBuffer();
 				sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
-				//				sb.append("field.set(this, BeanFactory.getBean(").append(tempEn.getValue().getName()).append("));");
 				sb.append("field.set(this, BeanFactory.getBean(\"").append(tempEn.getValue().getName()).append("\"));");
+				//				sb.append("field.set(this, new ").append(tempEn.getValue().getName() + DefaultClassProcessingFactory.Impl).append("());");
 				return new HandlerInfo(sb.toString(), tempEn.getValue().getName());
 			}
 		}

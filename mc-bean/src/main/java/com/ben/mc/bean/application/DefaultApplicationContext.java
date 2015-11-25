@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import com.ben.mc.bean.classprocessing.AbstractClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
-import com.ben.mc.bean.classprocessing.DefaultXmlClassProcessingFactory;
+import com.ben.mc.bean.classprocessing.DefaultClassProcessingXmlFactory;
 import com.ben.mc.bean.scan.Scan;
 import com.ben.mc.bean.util.ShortNameUtil;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
@@ -55,7 +55,7 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		//bean
 		//intercept
 		Map<String, CtClass> beans;
-		AbstractClassProcessingFactory<List<Map<String, CtClass>>> xmlX = new DefaultXmlClassProcessingFactory();
+		AbstractClassProcessingFactory<List<Map<String, CtClass>>> xmlX = new DefaultClassProcessingXmlFactory();
 		AbstractClassProcessingFactory<List<Map<String, CtClass>>> scanToPack = new DefaultClassProcessingFactory();
 		//xml
 		List<Map<String, CtClass>> xmlBeanQueue = xmlX.getCompleteClass(null, configInfo);

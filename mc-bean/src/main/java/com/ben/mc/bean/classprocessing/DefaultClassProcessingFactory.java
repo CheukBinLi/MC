@@ -196,6 +196,7 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 			sb.append("}");
 			System.out.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
+			
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
 			newClazz.addConstructor(defauleConstructor);
 			try {

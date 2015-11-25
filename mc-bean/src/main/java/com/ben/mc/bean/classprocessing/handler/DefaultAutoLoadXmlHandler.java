@@ -2,16 +2,11 @@ package com.ben.mc.bean.classprocessing.handler;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import com.ben.mc.annotation.AutoLoad;
-import com.ben.mc.bean.application.BeanFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
-import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
-import com.ben.mc.bean.util.ShortNameUtil;
+import com.ben.mc.bean.classprocessing.DefaultClassProcessingXmlFactory;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 
@@ -37,7 +32,7 @@ import javassist.NotFoundException;
  * @see 默认 自动装载处理器
  *
  */
-public class DefaultXmlAutoLoadHandler extends AbstractClassProcessingHandler<CtClass, AutoLoad> {
+public class DefaultAutoLoadXmlHandler extends AbstractClassProcessingHandler<CtClass, Object> {
 
 	public Set<Integer> thisType() {
 		return new HashSet<Integer>(Arrays.asList(Field));
@@ -55,8 +50,7 @@ public class DefaultXmlAutoLoadHandler extends AbstractClassProcessingHandler<Ct
 		if (null != (refName = cache.get(ClassProcessingFactory.NICK_NAME_CACHE).get(bean.getRef()).toString()) || null != (refName = ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(bean.getRef())).getName())) {
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
 			//				sb.append("field.setAccessible(true);");
-			//			sb.append("field.set(this, new ").append(refName + DefaultClassProcessingFactory.Impl).append("());");
-
+			//			sb.append("field.set(this, new ").append(refName + DefaultClassProcessingXmlFactory.Impl).append("());");
 			sb.append("field.set(this, BeanFactory.getBean(\"").append(refName).append("\"));");
 		}
 		else
@@ -70,8 +64,8 @@ public class DefaultXmlAutoLoadHandler extends AbstractClassProcessingHandler<Ct
 		return String.format(" %s=new %s%s();", o.getName(), implClassName, ClassProcessingFactory.Impl);
 	}
 
-	public Class<AutoLoad> handlerClass() {
-		return AutoLoad.class;
+	public Class<Object> handlerClass() {
+		return Object.class;
 	}
 
 }

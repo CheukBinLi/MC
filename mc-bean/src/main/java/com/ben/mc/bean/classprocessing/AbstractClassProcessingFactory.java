@@ -1,9 +1,9 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,6 +19,7 @@ import javassist.CtClass;
 public abstract class AbstractClassProcessingFactory<C> implements ClassProcessingFactory<C> {
 
 	public void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
+		LinkedList<Entry<String, CtClass>> errorQueue = new LinkedList<Entry<String, CtClass>>();
 		if (null == compileObject)
 			return;
 		for (int i = 0, len = compileObject.size(); i < len; i++) {
@@ -27,16 +28,35 @@ public abstract class AbstractClassProcessingFactory<C> implements ClassProcessi
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
+				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
 				//搜索class
 				//				BeanFactory.addClassInfo(scanClass(c, false ));
-				//反编查看
-				try {
-					en.getValue().writeFile("C:/Users/Ben/Desktop");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				//				//反编查看
+				//				try {
+				//					en.getValue().writeFile("C:/Users/Ben/Desktop");
+				//				} catch (IOException e) {
+				//					errorQueue.add(en);
+				//					//					e.printStackTrace();
+				//				}
 			}
 		}
+		//		Entry<String, CtClass> temp = null;
+		//		while (errorQueue.size() > 0) {
+		//			temp = errorQueue.removeFirst();
+		//			final Class c = temp.getValue().toClass();
+		//			BeanFactory.addBean(c, FULL_NAME_BEAN, temp.getKey());
+		//			BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(temp.getKey()));
+		//			BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(temp.getKey()));
+		//			//搜索class
+		//			//				BeanFactory.addClassInfo(scanClass(c, false ));
+		//			//反编查看
+		//			//			try {
+		//			//				temp.getValue().writeFile("C:/Users/Ben/Desktop");
+		//			//			} catch (IOException e) {
+		//			//				errorQueue.add(temp);
+		//			//				//					e.printStackTrace();
+		//			//			}
+		//		}
 	}
 
 	protected ClassInfo scanClass(Class c, boolean isConcurrent) {
