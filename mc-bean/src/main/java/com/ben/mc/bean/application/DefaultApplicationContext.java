@@ -19,12 +19,21 @@ import javassist.CtClass;
 
 public class DefaultApplicationContext extends BeanFactory implements ApplicationContext {
 
+	private static boolean isRuned = false;
+
 	public <T> T getBeans(String name) throws Throwable {
 		return getBean(name);
 	}
 
 	public DefaultApplicationContext(String config) throws Throwable {
+		this(config, false);
+	}
+
+	public DefaultApplicationContext(String config, boolean forced) throws Throwable {
 		super();
+		if (isRuned && !forced)
+			return;
+		isRuned = true;
 		//分析
 		InputStream in;
 		if (null == (in = Thread.currentThread().getContextClassLoader().getResourceAsStream(config))) {
