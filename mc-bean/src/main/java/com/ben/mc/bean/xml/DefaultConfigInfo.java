@@ -213,4 +213,15 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 		this.initSystemClassLoader = Boolean.valueOf(a.getValue(XmlType_Value));
 	}
 
+	public DefaultConfigInfo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public DefaultConfigInfo(String scanToPack, boolean initSystemClassLoader) {
+		super();
+		this.scanToPack = scanToPack;
+		this.initSystemClassLoader = initSystemClassLoader;
+	}
+
 }

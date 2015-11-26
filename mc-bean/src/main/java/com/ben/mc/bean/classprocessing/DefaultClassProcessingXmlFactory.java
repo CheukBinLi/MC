@@ -54,7 +54,6 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		compileObject.add(A1);
 		compileObject.add(A2);
 		//		compileObject.add(A3);
-
 		configInfo.getBeans();
 		Iterator<Entry<String, Bean>> it = configInfo.getBeans().entrySet().iterator();
 		//添加注册

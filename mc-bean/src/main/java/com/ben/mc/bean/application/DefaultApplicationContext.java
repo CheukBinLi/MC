@@ -25,25 +25,59 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		return getBean(name);
 	}
 
+	/***
+	 * 
+	 * @param Scan 搜索路径
+	 * @param forced 是否强制加载
+	 * @param initSystemClassLoader 是否附加到系统加载器
+	 * @throws Throwable
+	 */
+	public DefaultApplicationContext(String Scan, boolean forced, boolean initSystemClassLoader) throws Throwable {
+		this.action(Scan, false, forced, initSystemClassLoader);
+	}
+
+	/***
+	 * 
+	 * @param config xml文件名/XML文件路径
+	 * @throws Throwable
+	 */
 	public DefaultApplicationContext(String config) throws Throwable {
 		this(config, false);
 	}
 
+	/***
+	 * 
+	 * @param config xml文件名/XML文件路径
+	 * @param forced 是否强制加载
+	 * @throws Throwable
+	 */
 	public DefaultApplicationContext(String config, boolean forced) throws Throwable {
 		super();
+		this.action(config, true, forced, false);
+	}
+
+	public DefaultApplicationContext() {
+		super();
+	}
+
+	private void action(String config, boolean isXml, boolean forced, boolean initSystemClassLoader) throws Throwable {
 		if (isRuned && !forced)
 			return;
 		isRuned = true;
-		//分析
-		InputStream in;
-		if (null == (in = Thread.currentThread().getContextClassLoader().getResourceAsStream(config))) {
-			File file = new File(config);
-			if (!file.exists())
-				throw new Exception(String.format("没找到指定文件(%s),请检查路径!", config));
-			in = new FileInputStream(file);
+		DefaultConfigInfo configInfo = null;
+		if (isXml) {
+			//分析
+			InputStream in;
+			if (null == (in = Thread.currentThread().getContextClassLoader().getResourceAsStream(config))) {
+				File file = new File(config);
+				if (!file.exists())
+					throw new Exception(String.format("没找到指定文件(%s),请检查路径!", config));
+				in = new FileInputStream(file);
+			}
+			configInfo = (DefaultConfigInfo) XmlHandler.newInstance().read(in);
 		}
-
-		DefaultConfigInfo configInfo = (DefaultConfigInfo) XmlHandler.newInstance().read(in);
+		else
+			configInfo = new DefaultConfigInfo(config, initSystemClassLoader);
 
 		//附加装载容器
 		if (configInfo.isInitSystemClassLoader())
@@ -87,10 +121,6 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		//				System.out.println(en.getValue().getName());
 		//			}
 		//		}
-	}
-
-	public DefaultApplicationContext() {
-		super();
 	}
 
 	public static void main(String[] args) {
