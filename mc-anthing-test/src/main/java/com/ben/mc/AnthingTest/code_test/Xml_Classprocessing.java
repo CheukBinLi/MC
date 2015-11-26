@@ -14,5 +14,6 @@ public class Xml_Classprocessing {
 
 		XmlIocTest1 x = BeanFactory.getBean("XmlIocTest1");
 		x.aaxx("123xxxx");
+		x.aaxx3("3", "123");
 	}
 }

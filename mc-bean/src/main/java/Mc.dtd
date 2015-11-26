@@ -15,7 +15,7 @@
 <!ATTLIST Intercept name CDATA #REQUIRED>
 <!ATTLIST Intercept class CDATA #REQUIRED>
 <!ATTLIST Intercept ref CDATA #REQUIRED>
-<!ATTLIST Intercept methods (all) #REQUIRED>
+<!ATTLIST Intercept methods CDATA "all">
 
 <!--Bean-->
 <!ATTLIST Bean name CDATA #REQUIRED>
