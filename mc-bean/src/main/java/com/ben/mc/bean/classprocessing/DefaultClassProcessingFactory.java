@@ -203,7 +203,7 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
-			System.out.println(sb.toString());
+//			System.out.println(sb.toString());
 			defauleConstructor.setBody(sb.toString());
 
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));

@@ -53,15 +53,6 @@ public class XmlHandler extends DefaultHandler {
 		return defaultConfigInfo;
 	}
 
-	public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException {
-		DefaultConfigInfo defaultConfigInfo = (DefaultConfigInfo) new XmlHandler().read(XmlHandler.class.getClassLoader().getResourceAsStream("bean.xml"));
-		for (Entry<String, Bean> en : defaultConfigInfo.getBeans().entrySet())
-			System.err.println(en.getKey() + " : " + en.getValue().getClassName());
-		for (Entry<String, Intercept> en : defaultConfigInfo.getIntercepts().entrySet())
-			System.err.println(en.getKey() + " : " + en.getValue().getClassName() + " m:" + en.getValue().getMethods());
-		System.out.println(defaultConfigInfo.getCachePool().getClassName());
-	}
-
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
@@ -79,10 +70,19 @@ public class XmlHandler extends DefaultHandler {
 		else if (defaultConfigInfo.isScanToPack(qName)) {
 			defaultConfigInfo.setScanToPack(attributes);
 		}
-		//		else if (defaultConfigInfo.isInitClassLoader(qName)) {
-		//			defaultConfigInfo.setInitClassLoader(attributes);
-		//		}
+		else if (defaultConfigInfo.isInitSystemClassLoader(qName)) {
+			defaultConfigInfo.setInitSystemClassLoader(attributes);
+		}
 		super.startElement(uri, localName, qName, attributes);
+	}
+
+	public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+		DefaultConfigInfo defaultConfigInfo = (DefaultConfigInfo) new XmlHandler().read(XmlHandler.class.getClassLoader().getResourceAsStream("bean.xml"));
+		for (Entry<String, Bean> en : defaultConfigInfo.getBeans().entrySet())
+			System.err.println(en.getKey() + " : " + en.getValue().getClassName());
+		for (Entry<String, Intercept> en : defaultConfigInfo.getIntercepts().entrySet())
+			System.err.println(en.getKey() + " : " + en.getValue().getClassName() + " m:" + en.getValue().getMethods());
+		System.out.println(defaultConfigInfo.getCachePool().getClassName());
 	}
 
 }

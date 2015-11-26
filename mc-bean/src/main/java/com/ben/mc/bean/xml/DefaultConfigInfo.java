@@ -24,13 +24,14 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 		return XmlType_ScanToPack.equals(tag);
 	}
 
-	public boolean isInitClassLoader(String tag) {
-		return XmlType_InitClassLoader.equals(tag);
+	public boolean isInitSystemClassLoader(String tag) {
+		return XmlType_InitSystemClassLoader.equals(tag);
 	}
 
 	private static final long serialVersionUID = 1L;
 	private CachePool cachePool;
 	private String scanToPack;
+	private boolean initSystemClassLoader;
 	private Map<String, Bean> beans = new HashMap<String, DefaultConfigInfo.Bean>();
 	/***
 	 * 一个CLASS只有一条拦截记录
@@ -198,6 +199,18 @@ public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 	public DefaultConfigInfo setScanToPack(Attributes a) {
 		this.scanToPack = a.getValue(XmlType_Value);
 		return this;
+	}
+
+	public boolean isInitSystemClassLoader() {
+		return initSystemClassLoader;
+	}
+
+	public void setInitSystemClassLoader(boolean initSystemClassLoader) {
+		this.initSystemClassLoader = initSystemClassLoader;
+	}
+
+	public void setInitSystemClassLoader(Attributes a) {
+		this.initSystemClassLoader = Boolean.valueOf(a.getValue(XmlType_Value));
 	}
 
 }

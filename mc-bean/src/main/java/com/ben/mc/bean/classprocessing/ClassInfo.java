@@ -167,7 +167,7 @@ public class ClassInfo {
 	}
 
 	public static void main(String[] args) throws NotFoundException {
-		Class c = DefaultMethodPool.class;
+		Class c = DefaultClassProcessingFactory.class;
 
 		CtClass ctC = ClassPool.getDefault().get(c.getName());
 

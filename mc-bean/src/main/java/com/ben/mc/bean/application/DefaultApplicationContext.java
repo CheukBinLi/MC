@@ -37,8 +37,8 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		DefaultConfigInfo configInfo = (DefaultConfigInfo) XmlHandler.newInstance().read(in);
 
 		//附加装载容器
-		//		if (configInfo.isInitClassLoader())
-		ClassPool.getDefault().insertClassPath(new ClassClassPath(this.getClass()));
+		if (configInfo.isInitSystemClassLoader())
+			ClassPool.getDefault().insertClassPath(new ClassClassPath(this.getClass()));
 
 		//步骤
 		//		ClassPool cp = ClassPool.getDefault();
@@ -65,8 +65,8 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 			scanToPackQueue = scanToPack.getCompleteClass(Scan.doScan(configInfo.getScanToPack()), configInfo);
 		}
 		//生成
-		xmlX.anthingToClass(xmlBeanQueue);
-		xmlX.anthingToClass(scanToPackQueue);
+		xmlX.anthingToClass(xmlBeanQueue, configInfo.isInitSystemClassLoader());
+		xmlX.anthingToClass(scanToPackQueue, configInfo.isInitSystemClassLoader());
 		//		for (int i = 0, len = xmlBeanQueue.size(); i < len; i++) {
 		//			for (Entry<String, CtClass> en : xmlBeanQueue.get(i).entrySet()) {
 		//				System.out.println(en.getValue().getName());

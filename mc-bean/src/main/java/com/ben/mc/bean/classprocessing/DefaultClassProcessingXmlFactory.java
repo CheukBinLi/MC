@@ -113,7 +113,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 			ctFields = superClass.getDeclaredFields();
 			ctMethods = superClass.getDeclaredMethods();
 			interceptStr = configInfo.getIntercepts().get(superClass.getName());
-			System.err.println(superClass.getName());
+			//			System.err.println(superClass.getName());
 			allIntercept = false;
 			isIntercept = false;
 			if (null != interceptStr) {

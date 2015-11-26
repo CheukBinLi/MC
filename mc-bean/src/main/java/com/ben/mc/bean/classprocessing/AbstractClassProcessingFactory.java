@@ -3,7 +3,6 @@ package com.ben.mc.bean.classprocessing;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,17 +18,21 @@ import javassist.CtClass;
 public abstract class AbstractClassProcessingFactory<C> implements ClassProcessingFactory<C> {
 
 	static final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+	//	static final ClassLoader cl = ClassLoader.getSystemClassLoader().getParent();
 	static Method addClass = null;
 
 	static {
 		Method[] mx = java.lang.ClassLoader.class.getDeclaredMethods();
 		for (Method m : mx)
-			if ("addClass".contentEquals(m.getName()))
+			if ("addClass".contentEquals(m.getName())) {
 				addClass = m;
+				addClass.setAccessible(true);
+				break;
+			}
 	}
 
-	public void anthingToClass(List<Map<String, CtClass>> compileObject) throws CannotCompileException {
-		LinkedList<Entry<String, CtClass>> errorQueue = new LinkedList<Entry<String, CtClass>>();
+	public void anthingToClass(List<Map<String, CtClass>> compileObject, boolean initSystemClassLoader) throws CannotCompileException {
+		//		LinkedList<Entry<String, CtClass>> errorQueue = new LinkedList<Entry<String, CtClass>>();
 		if (null == compileObject)
 			return;
 		for (int i = 0, len = compileObject.size(); i < len; i++) {
@@ -38,18 +41,19 @@ public abstract class AbstractClassProcessingFactory<C> implements ClassProcessi
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
-				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
+//				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
 
-				//				if (fillClassLoader)
-				//					if (null != addClass)
-				//						try {
-				//							addClass.invoke(cl, c);
-				//						} catch (Exception e1) {
-				//							e1.printStackTrace();
-				//							throw new CannotCompileException(e1);
-				//						}
-				//					else
-				//						throw new CannotCompileException("加载失败");
+				if (initSystemClassLoader)
+					if (null != addClass)
+						try {
+//							System.out.println("addClass:" + c.getName());
+							addClass.invoke(cl, c);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+							throw new CannotCompileException(e1);
+						}
+					else
+						throw new CannotCompileException("加载失败");
 
 				//搜索class
 				//				BeanFactory.addClassInfo(scanClass(c, false ));
