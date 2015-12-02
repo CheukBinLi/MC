@@ -3,18 +3,26 @@
 @例子:
 
 		public static void main(String[] args) throws Throwable {
-            	//初始化（全局只要运行一次即可）
-            	//new DefaultApplicationContext("bean.xml");
-            	//或者
-      			//ApplicationContext ac = new DefaultApplicationContext("bean.xml");
-      			//或者
-      			//new DefaultApplicationContext("test", false, true);
+		
+            	 //初始化（全局只要运行一次即可）(完成模式，既使用xml，又使用注解)
+            	 //new DefaultApplicationContext("bean.xml");
+            	 
+            	 //或者(完成模式，既使用xml，又使用注解)
+      			 //ApplicationContext ac = new DefaultApplicationContext("bean.xml");
+      			 
+      			 //或者(注解模式，不使用xml)
+      			 //new DefaultApplicationContext("test", false, true);
+      			 
+      			 //或者(注解模式，不使用xml)
 			     ApplicationContext ac = new DefaultApplicationContext("test",false, true);
+			     
+			     //获取实例
 			     //IocTest1 i =ac.getBeans("IocTest1");
-			     //或者
+			     //或者(获取实例)
 			     //IocTest1 i = BeanFactory.getBean("IocTest1");
-			     //或者
+			     //或者(获取实例)
 			     IocTest1 i = DefaultApplicationContext.getBean("IocTest1");
+			     //运行
 		       	 i.aaxx("xxxx");
 		       }
 		       
