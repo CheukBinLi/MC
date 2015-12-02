@@ -100,6 +100,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		Object interceptStr;
 		Intercept tempIntercept;
 		List<HandlerInfo> handlerInfos;
+		Set<String> interecptMethodName = null;
 		int level = 0;
 		while (ctEn.hasNext()) {
 			level = 0;
@@ -137,7 +138,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 				}
 
 			for (CtMethod m : ctMethods) {//Method
-				if (allIntercept || (isIntercept && interceptStr.toString().contentEquals(m.getName()))) {
+				if (allIntercept || (isIntercept && null != interecptMethodName && interecptMethodName.contains(m.getName()))) {
 					//						handlerInfos.add();
 					handlerInfo = interceptHandler.doProcessing(null, newClass, m, intercept);
 					if (null == handlerInfo)
