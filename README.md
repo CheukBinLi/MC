@@ -1,7 +1,7 @@
 可以用xml写配置。 mc-bean 包有有MC.dtd(约束)、bean.xml(例子，可以配合mc-anthing-test/src/main/java/com/ben/mc/AnthingTest/code_test/Xml_Classprocessing.java例子运行)
 可以不用xml直接传入描述路径运行即可。
-例子:
-@
+@例子:
+
 		public static void main(String[] args) throws Throwable {
             	//初始化（全局只要运行一次即可）
             	//new DefaultApplicationContext("bean.xml");
@@ -9,7 +9,7 @@
       			//ApplicationContext ac = new DefaultApplicationContext("bean.xml");
       			//或者
       			//new DefaultApplicationContext("test", false, true);
-			     ApplicationContext ac = new DefaultApplicationContext("test", false, true);
+			     ApplicationContext ac = new DefaultApplicationContext("test",false, true);
 			     //IocTest1 i =ac.getBeans("IocTest1");
 			     //或者
 			     //IocTest1 i = BeanFactory.getBean("IocTest1");
