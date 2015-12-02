@@ -1,7 +1,9 @@
 package com.ben.mc.bean.classprocessing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		Object interceptStr;
 		Intercept tempIntercept;
 		List<HandlerInfo> handlerInfos;
+		Set<String> interecptMethodName = null;
 		int level = 0;
 		while (ctEn.hasNext()) {
 			level = 0;
@@ -101,6 +104,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 						allIntercept = true;
 					}
 					isIntercept = true;
+					interecptMethodName = new HashSet<String>(Arrays.asList(interceptStr.toString().split(",")));
 				}
 			}
 			Map<String, Bean> tempB = DefaultCachePoolFactory.newInstance().get4Map(beans, superClass.getName(), "field");
@@ -116,7 +120,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 				}
 
 			for (CtMethod m : ctMethods) {//Method
-				if (allIntercept || (isIntercept && interceptStr.toString().contentEquals(m.getName()))) {
+				if (allIntercept || (isIntercept && null != interecptMethodName && interecptMethodName.contains(m.getName()))) {
 					//						handlerInfos.add();
 					handlerInfo = interceptHandler.doProcessing(null, newClass, m, intercept);
 					if (null == handlerInfo)
