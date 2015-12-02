@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT Context (InitSystemClassLoader*,Bean*,Intercept*,ScanToPack*)>
+<!--<!ELEMENT Context (CachePool,Bean*,Intercept*,ScanToPack*)>-->
+<!ELEMENT CachePool EMPTY>
+<!ELEMENT Bean EMPTY>
+<!ELEMENT Intercept EMPTY>
+<!ELEMENT ScanToPack EMPTY>
+<!ELEMENT InitSystemClassLoader EMPTY>
+
+<!--CachePool-->
+<!--<!ATTLIST CachePool class (com.ben.mc.cache.DefaultCachePoolFactory) #REQUIRED>-->
+<!--<!ATTLIST CachePool signleNewInstanceMethod (newInstance) #IMPLIED>-->
+
+<!--Intercept-->
+<!ATTLIST Intercept name CDATA #REQUIRED>
+<!ATTLIST Intercept class CDATA #REQUIRED>
+<!ATTLIST Intercept ref CDATA #REQUIRED>
+<!ATTLIST Intercept methods CDATA "all">
+
+<!--Bean-->
+<!ATTLIST Bean name CDATA #REQUIRED>
+<!ATTLIST Bean class CDATA #REQUIRED>
+<!ATTLIST Bean type (class|field) #REQUIRED>
+<!ATTLIST Bean ref CDATA #IMPLIED>
+
+<!--ScanToPack-->
+<!ATTLIST ScanToPack value CDATA #REQUIRED>
+<!--ScanToPack-->
+<!ATTLIST InitSystemClassLoader value (true|false) #REQUIRED>

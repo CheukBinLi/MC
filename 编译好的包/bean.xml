@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE Context SYSTEM "file:///E:/javaProject/Eclipse/MC/mc-util/src/main/java/Mc.dtd"> -->
+<!DOCTYPE Context SYSTEM "Mc.dtd">
+<Context>
+	<InitSystemClassLoader value="true" /><!-- 引导加载失败时，设置true,把class载加到系统引导 -->
+
+	<!-- 声名一个需要注入的对象 -->
+	<Bean name="autoLoadTestImpl" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="field" ref="xxxxxxxxxxx110" />
+	<!-- 注入声名 -->
+	<Bean name="xxxxxxxxxxx110" class="com.ben.mc.AnthingTest.mc.xml.XmlAutoLoadTestImpl" type="class" />
+
+	<!-- 注入 声名 -->
+	<Bean name="xml1" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" type="class" />
+	<Bean name="xml2" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest2" type="class" />
+	<Bean name="xml3" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest3" type="class" />
+
+	<!-- 拦截器 methods="all" 默认 -->
+	<Intercept methods="aaxx2,aaxx3" class="com.ben.mc.AnthingTest.mc.xml.XmlIocTest1" name="intercept0083" ref="com.ben.mc.AnthingTest.mc.xml.DefaultInterceptionXml" />
+
+	<!-- 自动扫描 -->
+	<ScanToPack value="org.ben.mc.AnthingTest,com.**.AnthingTest" />
+</Context>
