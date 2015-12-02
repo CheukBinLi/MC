@@ -166,21 +166,4 @@ public class ClassInfo {
 		return "";
 	}
 
-	public static void main(String[] args) throws NotFoundException {
-		Class c = DefaultClassProcessingFactory.class;
-
-		CtClass ctC = ClassPool.getDefault().get(c.getName());
-
-		Method[] methods = c.getDeclaredMethods();
-
-		CtMethod[] ctMethods = ctC.getDeclaredMethods();
-
-		for (Method m : methods)
-			System.out.println(getMethod(m));
-		for (CtMethod m : ctMethods) {
-			System.err.println(getMethod(m) + " return " + m.getReturnType().getSimpleName());
-			System.out.println(getReturn(m.getReturnType()));
-		}
-	}
-
 }

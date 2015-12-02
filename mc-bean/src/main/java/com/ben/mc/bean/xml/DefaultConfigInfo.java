@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
+import com.ben.mc.bean.classprocessing.ConfigInfo;
+
 public class DefaultConfigInfo implements Serializable, XmlType, ConfigInfo {
 
 	public boolean isBean(String tag) {

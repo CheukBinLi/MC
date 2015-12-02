@@ -17,7 +17,6 @@ public class ExecutorServiceFatory {
 	static int MAX_QUEUE = 15;
 	static int QUEUE = 5;
 	static int mix = 2;
-	//	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 	public final static ExecutorService SINGLE_EXECUTOR_SERVICE = new ForkJoinPool();
 	static final BlockingQueue<ExecutorService> EXECUTOR_SERVICES = new LinkedBlockingDeque<ExecutorService>();
 	static final BlockingDeque<Integer> SUPPLEMENT = new LinkedBlockingDeque<Integer>();
@@ -33,7 +32,6 @@ public class ExecutorServiceFatory {
 					try {
 						count = SUPPLEMENT.takeFirst();
 						for (int i = 0; i < count; i++) {
-							//EXECUTOR_SERVICES.add(Executors.newCachedThreadPool());
 							EXECUTOR_SERVICES.add(new ThreadPoolExectorServiceX());
 						}
 					} catch (InterruptedException e) {
@@ -114,21 +112,4 @@ public class ExecutorServiceFatory {
 		}
 	}
 
-	public static void main(String[] args) {
-		ExecutorService s = getExector();
-		s.submit(new Runnable() {
-
-			public void run() {
-				System.out.println("e:" + EXECUTOR_SERVICES.size());
-				System.out.println("s:" + SUPPLEMENT.size());
-				System.out.println("r:" + RUNING_POOL.size());
-				System.out.println("x");
-			}
-		});
-		s.shutdown();
-		System.err.println("e:" + EXECUTOR_SERVICES.size());
-		System.err.println("s:" + SUPPLEMENT.size());
-		System.err.println("r:" + RUNING_POOL.size());
-
-	}
 }

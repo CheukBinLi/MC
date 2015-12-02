@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.ben.mc.bean.classprocessing.ConfigInfo;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 import com.ben.mc.bean.xml.DefaultConfigInfo.CachePool;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Intercept;

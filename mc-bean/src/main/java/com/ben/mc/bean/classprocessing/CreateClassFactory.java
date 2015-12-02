@@ -23,7 +23,6 @@ public class CreateClassFactory {
 	}
 
 	public void create(final CreateClassInfo classInfo, final boolean initSystemClassLoader) {
-		//第一节
 		DefaultTempClass tempClass;
 		for (int i = 0, len = classInfo.getFirstQueue().size(); i < len; i++) {
 			try {
@@ -33,22 +32,15 @@ public class CreateClassFactory {
 				e.printStackTrace();
 			}
 		}
-		//第二节
 		errorQueue.addAll(classInfo.getSecondQueue());
 		while (errorQueue.size() > 0) {
-			//建立构造、构造加载
 			tempClass = errorQueue.poll();
 			try {
 				CtConstructor tempC;
 				CtClass newClazz = tempClass.getNewClazz();
 				CtConstructor[] ctConstructors = tempClass.getSuperClazz().getDeclaredConstructors();
 				CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
-				//				System.err.println(tempClass.getConstructor());
 				defauleConstructor.setBody(tempClass.getConstructor());
-
-				//				defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
-
-				//################构造###################
 				newClazz.addConstructor(defauleConstructor);
 
 				try {
@@ -58,7 +50,6 @@ public class CreateClassFactory {
 						newClazz.addConstructor(tempC);
 					}
 				} catch (DuplicateMemberException e) {
-					//				e.printStackTrace();
 				}
 				AbstractClassProcessingFactory.anthingToClass(newClazz, tempClass.getSuperClazz().getName(), isInitSystemClassLoader());
 			} catch (Exception e) {

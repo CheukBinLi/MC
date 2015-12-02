@@ -49,7 +49,8 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 			else
 				temp = new ArrayList<Object>();
 			getCache().put(key, temp);
-		} else
+		}
+		else
 			temp = (List<Object>) obj;
 		obj = null;
 		int size = floor.length;
@@ -59,7 +60,6 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		else
 			path = new ArrayList<Integer>();
 		for (int i = 0; i < size - 1; i++) {
-			//长度
 			if (floor[i] < temp.size()) {
 				obj = temp.get(floor[i]);
 				if (null == obj) {
@@ -68,7 +68,6 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 				path.add(floor[i]);
 				temp = (List<Object>) obj;
 			}
-			//大于
 			else {
 				if (isConcurrent)
 					obj = new CopyOnWriteArrayList<Object>();
@@ -82,7 +81,8 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 		if (floor[size - 1] < temp.size()) {
 			temp.set(floor[size - 1], value);
 			path.add(floor[size - 1]);
-		} else {
+		}
+		else {
 			temp.add(value);
 			path.add(temp.size() - 1);
 		}
@@ -108,19 +108,18 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 	}
 
 	public Object addNFloop4Map(boolean isConcurrent, Object value, Object... key) {
-		Object obj = get(key[0]);// 第一节
+		Object obj = get(key[0]);
 		Map container = null;
-		Object node;// 第n个节点
+		Object node;
 		if (null == obj) {
 			if (isConcurrent)
 				obj = new ConcurrentHashMap<Object, Object>();
 			else
 				obj = new HashMap<Object, Object>();
-			put(key[0], obj);// 添加第一节
+			put(key[0], obj);
 		}
 		container = (Map) obj;
 		for (int i = 1; i < key.length - 1; i++) {
-			// System.out.println("put:" + key[i]);
 			node = container.get(key[i]);
 			if (null == node) {
 				if (isConcurrent)
@@ -129,38 +128,8 @@ public abstract class AbstractCachePoolFactory implements CachePoolFactory {
 					node = new HashMap<Object, Object>();
 				container.put(key[i], node);
 			}
-			container = (Map) node;// 下一节
+			container = (Map) node;
 		}
-		//		System.out.println("key:" + key[key.length - 1]+"   "+value);
 		return container.put(key[key.length - 1], value);
-	}
-
-	public static void main(String[] args) throws Exception {
-		ArrayList<Integer> ax = new ArrayList<Integer>();
-		ax.add(99);
-		ax.set(0, 44);
-		System.out.println(ax.get(0));
-		AbstractCachePoolFactory a = new DefaultCachePoolFactory();
-		a.putList("小明", "a", 1, 2, 3, 4, 5, 6, 7, "小B");
-		System.out.println(a.get("小明"));
-		Integer[] A1 = a.addNFloor(true, "学校分级", "野鸡小学", 1);
-		Integer[] A2 = a.addNFloor(true, "学校分级", "野鸡小学1-1班", 1, 1);
-		Integer[] A3 = a.addNFloor(true, "学校分级", "野鸡小学1-2班", 1, 1);
-		Integer[] A33 = a.addNFloor(true, "学校分级", "野鸡小学1-3班", 1, 7, 1, 1, 1);
-		Integer[] A4 = a.addNFloor(true, "学校分级", "野鸡小学2", 2);
-		System.out.println(a.getNFloor("学校分级", A1));
-		System.out.println(a.getNFloor("学校分级", A2));
-		System.out.println(a.getNFloor("学校分级", A3));
-		System.out.println(a.getNFloor("学校分级", A33));
-		System.out.println(a.getNFloor("学校分级", A4));
-		//		Object o = a.get("学校分级");
-		System.out.println(a.get("学校分级"));
-
-		///
-		a.addNFloop4Map(true, "小学鸡-1-1", "学校", "垃圾学校", "4年一班");
-		a.addNFloop4Map(true, "小学鸡-1-2", "学校", "垃圾学校", "4年二班");
-		a.addNFloop4Map(true, "小学鸡-1-3", "学校", "垃圾学校", "4年三班");
-		a.addNFloop4Map(true, "小学鸡-1-4", "学校", "垃圾学校", "4年一班");
-		System.out.println(a.get4Map("学校", "垃圾学校", "4年一班"));
 	}
 }

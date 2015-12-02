@@ -29,15 +29,6 @@ public class HandlerInfo {
 	 */
 	private String[] imports;
 
-	//	/***
-	//	 * 附加字段
-	//	 */
-	//	private Object[] additionalField;
-	//	/***
-	//	 * 附加方法
-	//	 */
-	//	private Object[] additionalMethod;
-
 	/***
 	 * 新类
 	 */

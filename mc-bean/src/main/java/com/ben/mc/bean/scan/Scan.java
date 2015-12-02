@@ -34,18 +34,11 @@ public class Scan {
 		String[] paths = null;
 		paths = path.split(",");
 		String[] fullPaths = paths;
-		//后期换并发模式
 		for (int i = 0, len = paths.length; i < len; i++) {
 			Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(paths[i].contains("*") ? paths[i].split("/")[0] : paths[i]);
 			Set<URL> scanResult = new LinkedHashSet<URL>();
 			while (urls.hasMoreElements()) {
-				//			 URL u = urls.nextElement();
 				scanResult.add(urls.nextElement());
-				//			 System.out.println(u.getFile());
-				// System.out.println(u.getFile().replace(File.separator, "/"));
-				// System.err.println(u.getFile().substring(u.getFile().indexOf(paths[0])));
-				// 第一段完成，遍历所有路径,再正则
-				// jar
 			}
 			result.addAll(classMatchFilter(fullPaths[i], scanResult));
 		}
@@ -73,7 +66,6 @@ public class Scan {
 			else
 				fileClassPaths.add(u);
 		}
-		//过滤
 		futures.add(executorService.submit(new Scan.FileFilter(jarClassPaths, pathPattern, 0, countDownLatch) {
 			@Override
 			public Set<String> doFilter(Set<URL> url, String pathPattern, int startIndex) throws IOException {
@@ -117,19 +109,15 @@ public class Scan {
 	}
 
 	protected static final Set<String> fileTypeFilter(File file, String pathPattern, int startIndex) {
-		//Map<String, String> result = new WeakHashMap<String, String>();
 		Set<String> result = new HashSet<String>();
 		if (file.isFile()) {
 			if (file.getPath().replace(File.separator, "/").matches(pathPattern))
-				//result.put(file.getName(), file.getPath().substring(startIndex).replace(".class", "").replace(File.separator, "."));
-				//文件添加返回
 				result.add(file.getPath().substring(startIndex).replace(".class", "").replace(File.separator, "."));
 			return result;
 		}
 		else if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (File f : files) {
-				//目录递归
 				result.addAll(fileTypeFilter(f, pathPattern, startIndex));
 			}
 		}
@@ -167,72 +155,5 @@ public class Scan {
 			return result;
 		}
 
-	}
-
-	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-
-		// ClassPathXmlApplicationContext c=new ClassPathXmlApplicationContext();
-		// c.getBean("a");
-
-		// doScan("antlr/actions");
-		//		Set<String> result = doScan("org/**/orm/hibernate4");
-		//		Set<String> result = doScan("com");
-		Set<String> result = doScan("javassist/**/annotation,com");
-		Iterator<String> it = result.iterator();
-		while (it.hasNext())
-			System.err.println(it.next());
-
-		if (true)
-			return;
-		WeakHashMap<String, List<String>> weakHashMap = new WeakHashMap<String, List<String>>();
-		WeakHashMap<String, String> weakHashMap1 = new WeakHashMap<String, String>();
-		List<String> list = new ArrayList<String>();
-		list.add("1");
-		list.add("2");
-		list.add("3");
-		weakHashMap.put("1", list);
-		weakHashMap1.put("x", "xxxxxxxxxx");
-		list = null;
-		System.gc();
-		System.out.println(weakHashMap.get("1").get(2));
-		System.out.println(weakHashMap1.get("x"));
-
-		String a = "org/a/b/c/aspectj/UnlockSignatureImpl.class";
-		String a1 = "org/a/aspectj/UnlockSignatureImpl.class";
-
-		System.out.println(a.matches("^org/[^/]*/aspectj/*.*"));
-		System.out.println(a.matches("^org/*.*/aspectj/*.*"));
-
-		String b = "asdf/*/asdf/**";
-		b = b.replace("/*/", "/[^/]*/");
-		b = b.replace("**", ".*");
-
-		System.out.println(b);
-		System.out.println("com/ben/net/factory".matches("^com/*.*/net/*.*"));
-		System.out.println("org/aspectj/runtime/reflect/UnlockSignatureImpl.class".matches("^org/*.*/reflect/*.*"));
-		System.out.println("com/a/ben".replace("/", "B"));
-		System.out.println("com/a/ben".matches("^[com]/[a]/*.*"));
-		System.out.println("com/a/ben".matches("^+com/+a/*.*"));
-
-		Pattern p = Pattern.compile("com/a/*.*");
-		Matcher m = p.matcher("com/aadsf/ben");
-		System.out.println(m.matches());
-
-		String XM = "(^//.|^/)?:(/x)?$";
-		String XM2 = "^/c/a/v/v?+.*/.*.class$";
-		String XM3 = "^/c/a(/.*)?/x(/.*)?.class$";
-		System.err.println("c/a/v/c/".matches(XM));
-		System.err.println("XX:" + "/c/a/v/v/xxx/**.class".matches(XM2));
-		System.err.println("XX3:" + "/c/a/asd/asdf/x1/v/x/asdfsa/asdfsadf/df/123.class".matches(XM3));
-
-		String stact = "^asdf\\**\\**\\abc";
-
-		stact = stact.replace(File.separator, "/");
-		stact = stact.replace("/**", "(/.*)?");
-
-		System.err.println("AX:" + "asdf/dddd/dd/dd/dd/dd/ddd/abc".matches(stact));
-		System.out.println(stact);
-
-		System.out.println("MBA:" + "E:/javaProject/Eclipse/BenDemo/javassistTest/target/classes/org/springframework/orm/hibernate4/testAA/xxxx.class".matches("^(/.*/|.*/)?org(/.*)?/orm/hibernate4(/.*)?.class$"));
 	}
 }

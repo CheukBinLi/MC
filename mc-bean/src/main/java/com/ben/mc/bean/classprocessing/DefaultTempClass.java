@@ -1,19 +1,12 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
 
 public class DefaultTempClass implements TempClass {
 
 	private CtClass superClazz;
 	private CtClass newClazz;
 	private String constructorBody;
-	//	private List<CtField> fields;
-	//	private List<CtMethod> mMethods;
 	private Object additional;
 
 	public DefaultTempClass() {
@@ -57,26 +50,6 @@ public class DefaultTempClass implements TempClass {
 	public void setConstructor(String constructorBody) {
 		this.constructorBody = constructorBody;
 	}
-
-	//	public List<CtField> getFields() {
-	//		if (null == this.fields)
-	//			this.fields = new ArrayList<CtField>();
-	//		return fields;
-	//	}
-	//
-	//	public void setFields(List<CtField> fields) {
-	//		this.fields = fields;
-	//	}
-	//
-	//	public List<CtMethod> getmMethods() {
-	//		if (null == this.mMethods)
-	//			this.mMethods = new ArrayList<CtMethod>();
-	//		return mMethods;
-	//	}
-	//
-	//	public void setmMethods(List<CtMethod> mMethods) {
-	//		this.mMethods = mMethods;
-	//	}
 
 	public Object getAdditional() {
 		return additional;
