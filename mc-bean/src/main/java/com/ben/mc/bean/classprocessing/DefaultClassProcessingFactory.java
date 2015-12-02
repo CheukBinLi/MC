@@ -20,21 +20,17 @@ import com.ben.mc.bean.classprocessing.handler.HandlerInfo;
 import com.ben.mc.bean.util.ExecutorServiceFatory;
 import com.ben.mc.bean.util.ShortNameUtil;
 
-import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMember;
 import javassist.CtMethod;
-import javassist.CtNewConstructor;
 import javassist.NotFoundException;
-import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class DefaultClassProcessingFactory extends AbstractClassProcessingFactory<List<Map<String, CtClass>>> {
+public class DefaultClassProcessingFactory extends AbstractClassProcessingFactory<CreateClassInfo> {
 
-	public List<Map<String, CtClass>> getCompleteClass(Set<String> clazzs, Object config) throws Throwable {
+	public CreateClassInfo getCompleteClass(Set<String> clazzs, Object config) throws Throwable {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
 		final ConcurrentHashMap<String, String> nick = new ConcurrentHashMap<String, String>();
 		final ConcurrentHashMap<String, String> shortName = new ConcurrentHashMap<String, String>();
@@ -120,22 +116,24 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 		}
 	}
 
-	protected List<Map<String, CtClass>> doHandler(List<ClassProcessingHandler> handler, final Map<String, Map> classCache) throws Throwable {
+	protected CreateClassInfo doHandler(List<ClassProcessingHandler> handler, final Map<String, Map> classCache) throws Throwable {
 
 		final Map<String, String> autoLoadClass = new ConcurrentHashMap<String, String>();
 		classCache.put(ClassProcessingFactory.AUTO_LOAD_CACHE, autoLoadClass);
 
+		final CreateClassInfo result = new CreateClassInfo();
+
 		Iterator<Entry<String, CtClass>> it = classCache.get(REGISTER_CACHE).entrySet().iterator();
 
-		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
+		//		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
 		//		Set<CtField> additionalField = new HashSet<CtField>();//附加字段
 		//		Set<CtMethod> additionalMethod = new HashSet<CtMethod>();//附加方法
 
-		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
-		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
+		//		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
+		//		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
 		//		Map<String, CtClass> A3 = new HashMap<String, CtClass>();
-		compileObject.add(A1);
-		compileObject.add(A2);
+		//		compileObject.add(A1);
+		//		compileObject.add(A2);
 		//		compileObject.add(A3);
 
 		Entry<String, CtClass> en;
@@ -178,20 +176,17 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 					}
 				}
 			}
-			if (level == 0)
-				A1.put(en.getKey(), newClazz);
-			else
-				A2.put(en.getKey(), newClazz);
+
 			//Import
 			newClazz.getClassPool().importPackage("java.lang.Exception");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Field");
 			newClazz.getClassPool().importPackage("java.lang.reflect.Method");
 			newClazz.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
 			newClazz.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
-			//建立构造、构造加载
-			CtConstructor tempC;
-			CtConstructor[] ctConstructors = tempClazz.getDeclaredConstructors();
-			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
+			//			//建立构造、构造加载
+			//			CtConstructor tempC;
+			//			CtConstructor[] ctConstructors = tempClazz.getDeclaredConstructors();
+			//			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClazz);
 			StringBuffer sb = new StringBuffer("{");
 			sb.append("super($$);");
 			if (handlerInfos.size() > 0) {
@@ -203,20 +198,22 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
-//			System.out.println(sb.toString());
-			defauleConstructor.setBody(sb.toString());
+			//			System.out.println(sb.toString());
+			//						defauleConstructor.setBody(sb.toString());
 
 			//			defauleConstructor.addCatch("", newClazz.getClassPool().get("java.lang.Exception"));
-			newClazz.addConstructor(defauleConstructor);
-			try {
-				for (CtConstructor c : ctConstructors) {
-					tempC = CtNewConstructor.copy(c, newClazz, null);
-					tempC.setBody("{super($$);}");
-					newClazz.addConstructor(tempC);
-				}
-			} catch (DuplicateMemberException e) {
-				//				e.printStackTrace();
-			}
+			//			//################构造###################
+			//			newClazz.addConstructor(defauleConstructor);
+			//
+			//			try {
+			//				for (CtConstructor c : ctConstructors) {
+			//					tempC = CtNewConstructor.copy(c, newClazz, null);
+			//					tempC.setBody("{super($$);}");
+			//					newClazz.addConstructor(tempC);
+			//				}
+			//			} catch (DuplicateMemberException e) {
+			//				//				e.printStackTrace();
+			//			}
 			//Import
 			for (HandlerInfo h : handlerInfos) {
 				if (null != h.getImports())
@@ -224,13 +221,13 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 						newClazz.getClassPool().importPackage(s);
 					}
 			}
-			//Additional 附加对旬
-			//			Iterator<CtField> itField = additionalField.iterator();
-			//			while (itField.hasNext())
-			//				newClazz.addField(itField.next());
-			//			Iterator<CtMethod> itMethod = additionalMethod.iterator();
-			//			while (itMethod.hasNext())
-			//				newClazz.addMethod(itMethod.next());
+
+			if (level == 0)
+				//				A1.put(en.getKey(), newClazz);
+				result.addFirstQueue(new DefaultTempClass(tempClazz, newClazz));
+			else
+				result.addSecondQueue(new DefaultTempClass(tempClazz, newClazz, sb.toString(), null));
+			//				A2.put(en.getKey(), newClazz);
 
 			//反编查看
 			//			try {
@@ -240,7 +237,8 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 			//			}
 		}
 		//				anthingToClass(compileObject);
-		return compileObject;
+		//		return compileObject;
+		return result;
 	}
 
 }

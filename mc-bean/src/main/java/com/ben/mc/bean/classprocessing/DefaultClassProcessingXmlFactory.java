@@ -22,21 +22,20 @@ import com.ben.mc.cache.DefaultCachePoolFactory;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
-import javassist.CtNewConstructor;
-import javassist.bytecode.DuplicateMemberException;
 
 @SuppressWarnings({ "rawtypes", "unused" })
-public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFactory<List<Map<String, CtClass>>> {
+public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFactory<CreateClassInfo> {
 
-	public List<Map<String, CtClass>> getCompleteClass(Set<String> clazzs, Object config) throws Throwable {
+	public CreateClassInfo getCompleteClass(Set<String> clazzs, Object config) throws Throwable {
 		final ConcurrentHashMap<String, CtClass> complete = new ConcurrentHashMap<String, CtClass>();
 		final ConcurrentHashMap<String, String> nick = new ConcurrentHashMap<String, String>();
 		final ConcurrentHashMap<String, String> shortName = new ConcurrentHashMap<String, String>();
 
 		final DefaultConfigInfo configInfo = (DefaultConfigInfo) config;
+
+		final CreateClassInfo result = new CreateClassInfo();
 
 		Map<String, Map> cache = new HashMap<String, Map>();
 		Map<String, DefaultConfigInfo> configMap = new HashMap<String, DefaultConfigInfo>();
@@ -46,13 +45,13 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		cache.put(ClassProcessingFactory.SHORT_NAME_CACHE, shortName);
 		cache.put(ClassProcessingFactory.XML_CONFIG_CACHE, configMap);
 		//分组
-		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
+		//		List<Map<String, CtClass>> compileObject = new ArrayList<Map<String, CtClass>>();
 
-		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
-		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
+		//		Map<String, CtClass> A1 = new HashMap<String, CtClass>();
+		//		Map<String, CtClass> A2 = new HashMap<String, CtClass>();
 		//		Map<String, CtClass> A3 = new HashMap<String, CtClass>();
-		compileObject.add(A1);
-		compileObject.add(A2);
+		//		compileObject.add(A1);
+		//		compileObject.add(A2);
 		//		compileObject.add(A3);
 		configInfo.getBeans();
 		Iterator<Entry<String, Bean>> it = configInfo.getBeans().entrySet().iterator();
@@ -148,10 +147,6 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 					level++;
 				}
 			}
-			if (level == 0)
-				A1.put(tempCtEn.getKey(), newClass);
-			else
-				A2.put(tempCtEn.getKey(), newClass);
 			//Import
 			for (HandlerInfo h : handlerInfos) {
 				if (null != h.getImports())
@@ -165,9 +160,9 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 			newClass.getClassPool().importPackage("com.ben.mc.bean.application.BeanFactory");
 			newClass.getClassPool().importPackage("com.ben.mc.bean.classprocessing.ClassInfo");
 			//建立构造、构造加载
-			CtConstructor tempC;
-			CtConstructor[] ctConstructors = superClass.getDeclaredConstructors();
-			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClass);
+			//			CtConstructor tempC;
+			//			CtConstructor[] ctConstructors = superClass.getDeclaredConstructors();
+			//			CtConstructor defauleConstructor = CtNewConstructor.defaultConstructor(newClass);
 			StringBuffer sb = new StringBuffer("{");
 			sb.append("super($$);");
 			if (handlerInfos.size() > 0) {
@@ -179,23 +174,32 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 				sb.append("}catch(java.lang.Exception e){e.printStackTrace();}");
 			}
 			sb.append("}");
-			defauleConstructor.setBody(sb.toString());
-			//			defauleConstructor.addCatch("", newClass.getClassPool().get("java.lang.Exception"));
-			newClass.addConstructor(defauleConstructor);
-			try {
-				for (CtConstructor c : ctConstructors) {
-					tempC = CtNewConstructor.copy(c, newClass, null);
-					tempC.setBody("{super($$);}");
-					newClass.addConstructor(tempC);
-				}
-			} catch (DuplicateMemberException e) {
-				//				e.printStackTrace();
-			}
+			//加添构内容（放到建立工厂里）
+			//			defauleConstructor.setBody(sb.toString());
+			//			//			defauleConstructor.addCatch("", newClass.getClassPool().get("java.lang.Exception"));
+			//			newClass.addConstructor(defauleConstructor);
+			//			try {
+			//				for (CtConstructor c : ctConstructors) {
+			//					tempC = CtNewConstructor.copy(c, newClass, null);
+			//					tempC.setBody("{super($$);}");
+			//					newClass.addConstructor(tempC);
+			//				}
+			//			} catch (DuplicateMemberException e) {
+			//				//				e.printStackTrace();
+			//			}
+
+			if (level == 0)
+				//				A1.put(tempCtEn.getKey(), newClass);
+				result.addFirstQueue(new DefaultTempClass(superClass, newClass));
+			else
+				result.addSecondQueue(new DefaultTempClass(superClass, newClass, sb.toString(), null));
+
 		}
 
 		//		Object o2;
 		//		anthingToClass(compileObject);
 
-		return compileObject;
+		//		return compileObject;
+		return result;
 	}
 }

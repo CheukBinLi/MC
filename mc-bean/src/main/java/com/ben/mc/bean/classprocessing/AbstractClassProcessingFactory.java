@@ -31,6 +31,26 @@ public abstract class AbstractClassProcessingFactory<C> implements ClassProcessi
 			}
 	}
 
+	public static void anthingToClass(final CtClass newClazz, final String superClazzName, boolean initSystemClassLoader) throws CannotCompileException {
+		final Class c = newClazz.toClass();
+		BeanFactory.addBean(c, FULL_NAME_BEAN, superClazzName);
+		BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(superClazzName));
+		BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(superClazzName));
+		//		System.err.println(ShortNameUtil.makeShortName(en.getKey()));
+
+		if (initSystemClassLoader)
+			if (null != addClass)
+				try {
+					//					System.out.println("addClass:" + c.getName());
+					addClass.invoke(cl, c);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					throw new CannotCompileException(e1);
+				}
+			else
+				throw new CannotCompileException("加载失败");
+	}
+
 	public void anthingToClass(List<Map<String, CtClass>> compileObject, boolean initSystemClassLoader) throws CannotCompileException {
 		//		LinkedList<Entry<String, CtClass>> errorQueue = new LinkedList<Entry<String, CtClass>>();
 		if (null == compileObject)
@@ -41,12 +61,12 @@ public abstract class AbstractClassProcessingFactory<C> implements ClassProcessi
 				BeanFactory.addBean(c, FULL_NAME_BEAN, en.getKey());
 				BeanFactory.addBean(c, NICK_NAME_BEAN, ShortNameUtil.makeLowerHumpNameShortName(en.getKey()));
 				BeanFactory.addBean(c, SHORT_NAME_BEAN, ShortNameUtil.makeShortName(en.getKey()));
-//				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
+				//				System.err.println(ShortNameUtil.makeShortName(en.getKey()));
 
 				if (initSystemClassLoader)
 					if (null != addClass)
 						try {
-//							System.out.println("addClass:" + c.getName());
+							//							System.out.println("addClass:" + c.getName());
 							addClass.invoke(cl, c);
 						} catch (Exception e1) {
 							e1.printStackTrace();

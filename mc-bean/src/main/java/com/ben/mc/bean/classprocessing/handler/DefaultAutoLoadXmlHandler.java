@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
+import com.ben.mc.bean.classprocessing.DefaultClassProcessingXmlFactory;
 import com.ben.mc.bean.xml.DefaultConfigInfo;
 import com.ben.mc.bean.xml.DefaultConfigInfo.Bean;
 
@@ -49,8 +50,8 @@ public class DefaultAutoLoadXmlHandler extends AbstractClassProcessingHandler<Ct
 		if (null != (refName = cache.get(ClassProcessingFactory.NICK_NAME_CACHE).get(bean.getRef()).toString()) || null != (refName = ((CtClass) cache.get(ClassProcessingFactory.REGISTER_CACHE).get(bean.getRef())).getName())) {
 			sb.append("java.lang.reflect.Field field = BeanFactory.getClassInfoField(\"").append(newClass.getName()).append("\",\"").append(o.getName()).append("\");");
 			//				sb.append("field.setAccessible(true);");
-			//			sb.append("field.set(this, new ").append(refName + DefaultClassProcessingXmlFactory.Impl).append("());");
-			sb.append("field.set(this, BeanFactory.getBean(\"").append(refName).append("\"));");
+			sb.append("field.set(this, new ").append(refName + DefaultClassProcessingXmlFactory.Impl).append("());");
+			//			sb.append("field.set(this, BeanFactory.getBean(\"").append(refName).append("\"));");
 		}
 		else
 			throw new Throwable(String.format("%s没有注册实例，请在Ban中配置相关参数。 ", bean.getRef()));
@@ -65,6 +66,16 @@ public class DefaultAutoLoadXmlHandler extends AbstractClassProcessingHandler<Ct
 
 	public Class<Object> handlerClass() {
 		return Object.class;
+	}
+
+	static {
+		//		super($$);
+		//		try {
+		//			field.set(this, new com.ben.mc.AnthingTest.mc.xml.XmlAutoLoadTestImpl$MC_IMPL());
+		//			field.set(this, BeanFactory.getBean("com.ben.mc.AnthingTest.mc.xml.XmlAutoLoadTestImpl"));
+		//		} catch (java.lang.Exception e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 }

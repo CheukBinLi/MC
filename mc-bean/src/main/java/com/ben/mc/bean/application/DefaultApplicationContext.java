@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ben.mc.bean.classprocessing.AbstractClassProcessingFactory;
+import com.ben.mc.bean.classprocessing.CreateClassFactory;
+import com.ben.mc.bean.classprocessing.CreateClassInfo;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingXmlFactory;
 import com.ben.mc.bean.scan.Scan;
@@ -98,18 +100,19 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 		//bean
 		//intercept
 		Map<String, CtClass> beans;
-		AbstractClassProcessingFactory<List<Map<String, CtClass>>> xmlX = new DefaultClassProcessingXmlFactory();
-		AbstractClassProcessingFactory<List<Map<String, CtClass>>> scanToPack = new DefaultClassProcessingFactory();
+		AbstractClassProcessingFactory<CreateClassInfo> xmlX = new DefaultClassProcessingXmlFactory();
+		AbstractClassProcessingFactory<CreateClassInfo> scanToPack = new DefaultClassProcessingFactory();
 		//xml
-		List<Map<String, CtClass>> xmlBeanQueue = xmlX.getCompleteClass(null, configInfo);
+		CreateClassInfo beanQueue = xmlX.getCompleteClass(null, configInfo);
 		//ScanToPack
-		List<Map<String, CtClass>> scanToPackQueue = null;
+		//		CreateClassInfo scanToPackQueue = null;
 		if (null != configInfo.getScanToPack()) {
-			scanToPackQueue = scanToPack.getCompleteClass(Scan.doScan(configInfo.getScanToPack()), configInfo);
+			beanQueue.addAll(scanToPack.getCompleteClass(Scan.doScan(configInfo.getScanToPack()), configInfo));
 		}
 		//生成
-		xmlX.anthingToClass(xmlBeanQueue, configInfo.isInitSystemClassLoader());
-		xmlX.anthingToClass(scanToPackQueue, configInfo.isInitSystemClassLoader());
+		CreateClassFactory.newInstance().create(beanQueue, configInfo.isInitSystemClassLoader());
+		//		xmlX.anthingToClass(xmlBeanQueue, configInfo.isInitSystemClassLoader());
+		//		xmlX.anthingToClass(scanToPackQueue, configInfo.isInitSystemClassLoader());
 		//		for (int i = 0, len = xmlBeanQueue.size(); i < len; i++) {
 		//			for (Entry<String, CtClass> en : xmlBeanQueue.get(i).entrySet()) {
 		//				System.out.println(en.getValue().getName());

@@ -1,18 +1,14 @@
 package com.ben.mc.AnthingTest.code_test;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import com.ben.mc.AnthingTest.mc.scan.IocTest1;
 import com.ben.mc.bean.application.BeanFactory;
 import com.ben.mc.bean.classprocessing.ClassProcessingFactory;
+import com.ben.mc.bean.classprocessing.CreateClassInfo;
 import com.ben.mc.bean.classprocessing.DefaultClassProcessingFactory;
 import com.ben.mc.bean.scan.Scan;
-
-import javassist.CtClass;
 
 public class Scan_Classprocessing {
 
@@ -24,10 +20,10 @@ public class Scan_Classprocessing {
 		//		o.x();
 		//2.0
 
-		ClassProcessingFactory<List<Map<String, CtClass>>> classProcessingFactory = new DefaultClassProcessingFactory() {
+		ClassProcessingFactory<CreateClassInfo> classProcessingFactory = new DefaultClassProcessingFactory() {
 		};
 
-		List<Map<String, CtClass>> result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest.*.*"), null);
+		CreateClassInfo result = classProcessingFactory.getCompleteClass(Scan.doScan("com.ben.mc.AnthingTest.*.*"), null);
 
 		//		for (Entry<String, CtClass> en : result.entrySet())
 		//			System.out.println(en.getValue().getName());
