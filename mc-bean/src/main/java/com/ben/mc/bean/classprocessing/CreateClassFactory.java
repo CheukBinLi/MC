@@ -22,7 +22,7 @@ public class CreateClassFactory {
 		return newInstance;
 	}
 
-	public void create(final CreateClassInfo classInfo, final boolean initSystemClassLoader) {
+	public void create(final CreateClassInfo classInfo, final boolean initSystemClassLoader) throws InterruptedException {
 		DefaultTempClass tempClass;
 		for (int i = 0, len = classInfo.getFirstQueue().size(); i < len; i++) {
 			try {
@@ -54,11 +54,7 @@ public class CreateClassFactory {
 				AbstractClassProcessingFactory.anthingToClass(newClazz, tempClass.getSuperClazz().getName(), isInitSystemClassLoader());
 			} catch (Exception e) {
 				//				e.printStackTrace();
-				try {
-					errorQueue.put(tempClass);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
+				errorQueue.put(tempClass);
 			}
 		}
 	}
