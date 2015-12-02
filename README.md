@@ -1,4 +1,4 @@
-可以用xml写配置。 mc-bean 包有有MC.dtd(约束)、bean.xml(例子，可以配合mc-anthing-test/src/main/java/com/ben/mc/AnthingTest/code_test/Xml_Classprocessing.java例子运行)
+可以用xml写配置。 mc-bean 包里包含MC.dtd(约束)、bean.xml两个文件(例子，可以配合mc-anthing-test/src/main/java/com/ben/mc/AnthingTest/code_test/Xml_Classprocessing.java例子运行)
 可以不用xml直接传入描述路径运行即可。
 @例子:
 
