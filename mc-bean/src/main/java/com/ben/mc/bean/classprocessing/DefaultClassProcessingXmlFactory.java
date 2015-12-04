@@ -55,6 +55,8 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		final String beans = "beans";
 		while (it.hasNext()) {
 			tempEn = it.next();
+			if (null != BeanFactory.getBean(tempEn.getValue().getClassName()))
+				continue;
 			tempClazz = pool.get(tempEn.getValue().getClassName());
 			complete.put(tempEn.getValue().getClassName(), tempClazz);
 			nick.put(tempEn.getKey(), tempEn.getValue().getClassName());
