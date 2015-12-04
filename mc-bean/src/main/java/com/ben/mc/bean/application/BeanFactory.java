@@ -21,9 +21,9 @@ public class BeanFactory {
 		A = cachePoolFactory.get4Map(ClassProcessingFactory.FULL_NAME_BEAN, name);
 		if (null == A)
 			A = cachePoolFactory.get4Map(ClassProcessingFactory.NICK_NAME_BEAN, ShortNameUtil.objectHumpNameLower(name));
-		else if (null == A)
+		if (null == A)
 			A = cachePoolFactory.get4Map(ClassProcessingFactory.SHORT_NAME_BEAN, name);
-		else if (null == A)
+		if (null == A)
 			return null;
 		return (T) ((Class) A).newInstance();
 	}

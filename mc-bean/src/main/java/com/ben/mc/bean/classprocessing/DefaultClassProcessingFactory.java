@@ -89,7 +89,7 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 					CtClass clazz = pool.get(className);
 
 					Object o = clazz.getAnnotation(Register.class);
-					if (null == o)
+					if (null == o || null != BeanFactory.getBean(clazz.getName()))
 						continue;
 					String name = ((Register) o).value();
 					if (name.length() > 0)
@@ -109,6 +109,10 @@ public class DefaultClassProcessingFactory extends AbstractClassProcessingFactor
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
+			} catch (InstantiationException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
 			} finally {
 				if (null != countDownLatch)
 					countDownLatch.countDown();

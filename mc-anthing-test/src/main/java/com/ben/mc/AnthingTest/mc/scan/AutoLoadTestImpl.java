@@ -6,7 +6,7 @@ import com.ben.mc.annotation.Register;
 public class AutoLoadTestImpl implements AutoLoadTestI {
 
 	public void hello(String name) {
-		System.out.println(name + "你好!");
+		//System.out.println(name + "你好!");
 	}
 
 }
