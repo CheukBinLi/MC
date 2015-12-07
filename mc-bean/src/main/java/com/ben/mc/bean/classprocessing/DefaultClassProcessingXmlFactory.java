@@ -87,6 +87,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		Set<String> interecptMethodName = null;
 		int level = 0;
 		while (ctEn.hasNext()) {
+			interecptMethodName=null;
 			level = 0;
 			handlerInfos = new ArrayList<HandlerInfo>();
 			tempCtEn = ctEn.next();
