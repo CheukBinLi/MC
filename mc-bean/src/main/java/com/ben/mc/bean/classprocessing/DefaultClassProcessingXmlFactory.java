@@ -108,6 +108,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 		int level = 0;
 		while (ctEn.hasNext()) {
 			level = 0;
+			interecptMethodName=null;
 			handlerInfos = new ArrayList<HandlerInfo>();
 			tempCtEn = ctEn.next();
 			superClass = tempCtEn.getValue();
