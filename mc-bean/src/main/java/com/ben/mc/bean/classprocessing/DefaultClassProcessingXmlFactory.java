@@ -1,7 +1,9 @@
 package com.ben.mc.bean.classprocessing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +126,7 @@ public class DefaultClassProcessingXmlFactory extends AbstractClassProcessingFac
 						allIntercept = true;
 					}
 					isIntercept = true;
+					interecptMethodName = new HashSet<String>(Arrays.asList(intercept.getMethods().split(",")));
 				}
 			}
 			Map<String, Bean> tempB = DefaultCachePoolFactory.newInstance().get4Map(beans, superClass.getName(), "field");
