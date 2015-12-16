@@ -7,10 +7,10 @@ https://github.com/fdisk123/MC/tree/v2.10
 http://git.oschina.net/Z.Ben.L/MC/tree/v2.10
 
 @可以直接使用编译的包<编译好的包>
-						+------javassist-3.12.1.GA.jar
-						+------mc-annotation-0.0.1-SNAPSHOT.jar
-						+------mc-bean-0.0.1-SNAPSHOT.jar
-						+------mc-cache-0.0.1-SNAPSHOT.jar
+						@+------javassist-3.12.1.GA.jar
+						@+------mc-annotation-0.0.1-SNAPSHOT.jar
+						@+------mc-bean-0.0.1-SNAPSHOT.jar
+						@+------mc-cache-0.0.1-SNAPSHOT.jar
 
 
 可以用xml写配置。 mc-bean 包里包含MC.dtd(约束)、bean.xml两个文件(例子，可以配合mc-anthing-test/src/main/java/com/ben/mc/AnthingTest/code_test/Xml_Classprocessing.java例子运行)
