@@ -16,7 +16,6 @@ import com.ben.mc.bean.util.ShortNameUtil;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMember;
-import javassist.NotFoundException;
 
 /***
  * 

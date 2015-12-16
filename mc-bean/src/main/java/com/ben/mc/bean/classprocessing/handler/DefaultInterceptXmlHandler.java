@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.ben.mc.bean.classprocessing.ClassInfo;
 
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMember;
@@ -77,6 +76,6 @@ public class DefaultInterceptXmlHandler extends AbstractClassProcessingHandler<C
 		sb.append("}");
 		ctMethod.setBody(sb.toString());
 		newClazz.addMethod(ctMethod);
-		return new HandlerInfo(null, newClazz, ctMethod, null);
+		return new HandlerInfo(null, newClazz, ctMethod);
 	}
 }

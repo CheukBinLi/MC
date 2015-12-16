@@ -14,7 +14,7 @@ public class BeanFactory {
 
 	private static CachePoolFactory cachePoolFactory = new DefaultCachePoolFactory();
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> T getBean(String name) throws InstantiationException, IllegalAccessException {
 		//		System.out.println(name);
 		Object A;

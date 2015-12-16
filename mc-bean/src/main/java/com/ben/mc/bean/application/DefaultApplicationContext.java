@@ -3,8 +3,6 @@ package com.ben.mc.bean.application;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 
 import com.ben.mc.bean.classprocessing.AbstractClassProcessingFactory;
 import com.ben.mc.bean.classprocessing.CreateClassFactory;
@@ -17,7 +15,6 @@ import com.ben.mc.bean.xml.XmlHandler;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
-import javassist.CtClass;
 
 public class DefaultApplicationContext extends BeanFactory implements ApplicationContext {
 
@@ -83,7 +80,6 @@ public class DefaultApplicationContext extends BeanFactory implements Applicatio
 
 		if (configInfo.isInitSystemClassLoader())
 			ClassPool.getDefault().insertClassPath(new ClassClassPath(this.getClass()));
-		Map<String, CtClass> beans;
 		AbstractClassProcessingFactory<CreateClassInfo> xmlX = new DefaultClassProcessingXmlFactory();
 		AbstractClassProcessingFactory<CreateClassInfo> scanToPack = new DefaultClassProcessingFactory();
 		CreateClassInfo beanQueue = xmlX.getCompleteClass(null, configInfo);

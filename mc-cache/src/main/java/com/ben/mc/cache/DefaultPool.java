@@ -3,6 +3,7 @@ package com.ben.mc.cache;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unchecked")
 public class DefaultPool implements Pool<Object> {
 
 	public static final String NORNAL_BEAN = "NORNAL_BEAN";
@@ -19,12 +20,12 @@ public class DefaultPool implements Pool<Object> {
 	}
 
 	public Object put(Object key, Object value) {
-		Object o = key;
+		//		Object o = key;
 		return CACHE.put(key, value);
 	}
 
 	public <T> T get(Object key) {
-		Object x = CACHE;
+		//		Object x = CACHE;
 		return (T) CACHE.get(key);
 	}
 

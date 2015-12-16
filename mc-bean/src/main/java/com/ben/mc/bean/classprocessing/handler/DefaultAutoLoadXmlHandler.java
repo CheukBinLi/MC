@@ -53,7 +53,7 @@ public class DefaultAutoLoadXmlHandler extends AbstractClassProcessingHandler<Ct
 		else
 			throw new Throwable(String.format("%s没有注册实例，请在Ban中配置相关参数。 ", bean.getRef()));
 
-		return new HandlerInfo(sb.toString(), newClass, additional, null);
+		return new HandlerInfo(sb.toString(), newClass, additional);
 	}
 
 	public Class<Object> handlerClass() {

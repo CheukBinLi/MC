@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;

@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -18,8 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.ben.mc.bean.util.ExecutorServiceFatory;
 
@@ -90,6 +87,7 @@ public class Scan {
 		return result;
 	}
 
+	@SuppressWarnings("resource")
 	protected static final Set<String> jarTypeFilter(String pathPattern, Set<URL> urls) throws IOException {
 		Set<String> result = new HashSet<String>();
 		Iterator<URL> it = urls.iterator();
