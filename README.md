@@ -1,6 +1,8 @@
 请查看分支  V2.10 最终版。以后版本整合到Bin项目里
-
+Github
 https://github.com/fdisk123/MC/tree/v2.10
+Git@OSC
+http://git.oschina.net/Z.Ben.L/MC/tree/v2.10
 
 可以用xml写配置。 mc-bean 包里包含MC.dtd(约束)、bean.xml两个文件(例子，可以配合mc-anthing-test/src/main/java/com/ben/mc/AnthingTest/code_test/Xml_Classprocessing.java例子运行)
 可以不用xml直接传入描述路径运行即可。
