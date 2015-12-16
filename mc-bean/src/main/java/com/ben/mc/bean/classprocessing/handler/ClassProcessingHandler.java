@@ -64,6 +64,7 @@ public interface ClassProcessingHandler<O, A, I, II, R> {
 	 * @param additional 附加对像 ctfield/ctmethod...
 	 * @return 装拼完成的对象
 	 */
+	@SuppressWarnings("rawtypes")
 	public R doProcessing(Map<String, Map> cache, O newClazz, I additional, Object config) throws Throwable;
 
 }

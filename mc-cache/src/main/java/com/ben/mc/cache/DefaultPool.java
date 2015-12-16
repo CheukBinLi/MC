@@ -19,12 +19,12 @@ public class DefaultPool implements Pool<Object> {
 	}
 
 	public Object put(Object key, Object value) {
-		Object o = key;
+		//		Object o = key;
 		return CACHE.put(key, value);
 	}
 
 	public <T> T get(Object key) {
-		Object x = CACHE;
+		//		Object x = CACHE;
 		return (T) CACHE.get(key);
 	}
 

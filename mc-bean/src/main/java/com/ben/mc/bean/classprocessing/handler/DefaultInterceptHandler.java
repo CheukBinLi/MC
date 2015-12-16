@@ -79,7 +79,7 @@ public class DefaultInterceptHandler extends AbstractClassProcessingHandler<CtCl
 		//		System.err.println(sb.toString());
 		ctMethod.setBody(sb.toString());
 		newClazz.addMethod(ctMethod);
-		return new HandlerInfo(null, newClazz, ctMethod, null);
+		return new HandlerInfo(null, newClazz, ctMethod);
 	}
 
 	public static void main(String[] args) throws NotFoundException {

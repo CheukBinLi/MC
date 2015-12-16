@@ -17,6 +17,7 @@ package com.ben.mc.bean.classprocessing.handler;
  * @see 构造加载、注入/初始信息
  *
  */
+@SuppressWarnings("unchecked")
 public class HandlerInfo {
 
 	/***

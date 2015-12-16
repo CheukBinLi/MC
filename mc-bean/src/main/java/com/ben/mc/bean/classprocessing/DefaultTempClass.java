@@ -1,11 +1,6 @@
 package com.ben.mc.bean.classprocessing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
 
 public class DefaultTempClass implements TempClass {
 

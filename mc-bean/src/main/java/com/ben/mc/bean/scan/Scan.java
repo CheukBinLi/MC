@@ -98,6 +98,7 @@ public class Scan {
 		return result;
 	}
 
+	@SuppressWarnings("resource")
 	protected static final Set<String> jarTypeFilter(String pathPattern, Set<URL> urls) throws IOException {
 		Set<String> result = new HashSet<String>();
 		Iterator<URL> it = urls.iterator();
@@ -169,6 +170,7 @@ public class Scan {
 
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
 
 		// ClassPathXmlApplicationContext c=new ClassPathXmlApplicationContext();
